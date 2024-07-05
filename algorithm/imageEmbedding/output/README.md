@@ -1,0 +1,1 @@
+# Image Embedding 파일이 저장되는 디렉토리
