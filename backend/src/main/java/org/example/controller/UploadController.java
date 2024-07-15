@@ -22,18 +22,10 @@ public class UploadController {
 
     private final String UPLOAD_DIR = "src/main/uploads/";
 
-    @GetMapping("/")
-    public String index(){
-        return "upload";
-    }
+    
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(MultipartFile imageFile, MultipartFile videoFile, RedirectAttributes redirectAttributes) {
-        if (imageFile.isEmpty() || videoFile.isEmpty()) {
-            //redirectAttributes.addFlashAttribute("message", "Please select a file to upload.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("파일 없음");
-        }
-
         try {
             saveFile(imageFile);
             saveFile(videoFile);
@@ -51,8 +43,5 @@ public class UploadController {
         Files.write(path, bytes);
     }
 
-    @GetMapping("/uploadStatus")
-    public ResponseEntity<String> uploadStatus() {
-        return ResponseEntity.ok().body(""); // 실제 업로드 상태를 처리하는 로직을 여기에 추가
-    }
+    
 }

@@ -32,7 +32,7 @@ function App() {
       console.error('Upload error:', error);
     });
   };
-  
+
   return (
     <div className="App">
       <h1>Upload Image and Video</h1>
