@@ -10,6 +10,9 @@ videoFile에 이미지 넣고 요청
 
 저장경로 src/main/frontend/uploads/video
 
+
+
+
 사진 업로드 
 
 post /api/upload/image
@@ -18,7 +21,13 @@ imageFile에 이미지 넣고 요청
 
 저장경로 src/main/frontend/uploads/image
 
+
+
+
 기존 업로드에서 영상 하나만 넣고 전송하면됨 
+
+
+
 
 ### 경로 요청
 
