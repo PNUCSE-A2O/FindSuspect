@@ -35,5 +35,17 @@ uploads로부터 시작하는 파일경로 return
 react경로 수정 필요하면 말해주시면 됩니다.
 
 
+## 결과
+get /api/result
+[
+  {
+    "time": "00:01:13",
+    "accuracy": 83
+  },
+  {
+    "time": "00:02:33",
+    "accuracy": 55
+  }
+]
 
 
