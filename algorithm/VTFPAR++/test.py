@@ -11,7 +11,7 @@ from models.vit import *
 device= "cuda" if torch.cuda.is_available() else "cpu"
 
 #预训练模型
-ViT_model, ViT_preprocess = clip.load("ViT-B/16", device=device,download_root='C:/Users/huni0/OpenPAR/VTFPAR++/model')
+ViT_model, ViT_preprocess = clip.load("ViT-B/16", device=device,download_root='C:/Users/huni0/FindSUspect/algorithm/VTFPAR++/model')
 ViT_model.eval()
 #attr_names
 attr_words = [
@@ -33,7 +33,7 @@ checkpoint=torch.load('VTF-Pretrain.pth')
 
 
 class TransformerClassifier(nn.Module):
-    def __init__(self, attr_num, attr_words, dim=768, pretrain_path='C:/Users/huni0/OpenPAR/VTFPAR++/model/jx_vit_base_p16_224-80ecf9dd.pth'):
+    def __init__(self, attr_num, attr_words, dim=768, pretrain_path='C:/Users/huni0/FindSUspect/algorithm/VTFPAR++/model/jx_vit_base_p16_224-80ecf9dd.pth'):
         super().__init__()
         super().__init__()
         self.attr_num = attr_num
@@ -113,21 +113,23 @@ if __name__ == '__main__':
     result=main()
     result=result.squeeze()
     result=torch.sigmoid(result)
-    print(result)
+    # print(result)
     result=result.tolist()
+    #포즈 제외하고 배열에 추가
+    result=[value for index, value in enumerate(result) if index < 9 or index > 15]
     result=[round(value, 4) for value in result]
     print(result)
-    result_bool = []
-    for i in result:
-        if(i > 0.6):
-            result_bool.append(True)
-        else:
-            result_bool.append(False)
-    print(result_bool)
-    attr_result = []
-    for idx, value in enumerate(result_bool):
-        if(value):
-            attr_result.append(attr_words[idx])
-        else:
-            attr_result.append("none")
-    print(attr_result)
+    # result_bool = []
+    # for i in result:
+    #     if(i > 0.6):
+    #         result_bool.append(True)
+    #     else:
+    #         result_bool.append(False)
+    # print(result_bool)
+    # attr_result = []
+    # for idx, value in enumerate(result_bool):
+    #     if(value):
+    #         attr_result.append(attr_words[idx])
+    #     else:
+    #         attr_result.append("none")
+    # print(attr_result)
