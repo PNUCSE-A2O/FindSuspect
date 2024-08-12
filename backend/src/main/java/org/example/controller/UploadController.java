@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.ResponseDto;
+import org.example.dto.ResponseDto;
 import org.example.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,16 @@ public class UploadController {
     @Autowired
     UploadService uploadService;
 
+    private final String UPLOAD_DIR_VIDEO = "src/main/frontend/server/uploads/video/";
+    private final String UPLOAD_DIR_IMAGE = "src/main/frontend/server/uploads/image/";
+
     @GetMapping("/")
     public String mainPage(){
         return "upload";
     }
 
     @PostMapping("/api/upload/image")
-    public ResponseEntity<String> uploadImage(@RequestParam("imageFile") MultipartFile imageFile) {
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile imageFile) {
         try {
             uploadService.uploadImage(imageFile);
         } catch (IOException e) {
@@ -35,8 +39,7 @@ public class UploadController {
         return ResponseEntity.ok("정상 업로드");
     }
 
-    @PostMapping("/api/upload/video")
-    public ResponseEntity<String> uploadVideo(@RequestParam("videoFile") MultipartFile videoFile) {
+    public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile videoFile) {
         try {
             uploadService.uploadVideo(videoFile);
         } catch (IOException e) {

@@ -11,7 +11,7 @@ from models.vit import *
 device= "cuda" if torch.cuda.is_available() else "cpu"
 
 #预训练模型
-ViT_model, ViT_preprocess = clip.load("ViT-B/16", device=device,download_root='C:/Users/huni0/FindSUspect/algorithm/VTFPAR++/model')
+ViT_model, ViT_preprocess = clip.load("ViT-B/16", device=device,download_root='/data/FindSuspect/algorithm/OpenPAR/VTFPAR++/model')
 ViT_model.eval()
 #attr_names
 attr_words = [
@@ -28,12 +28,12 @@ attr_words = [
 ]
 
 
-checkpoint=torch.load('VTF-Pretrain.pth')
+checkpoint=torch.load('./VTF-Pretrain.pth')
 #print(checkpoint)
 
 
 class TransformerClassifier(nn.Module):
-    def __init__(self, attr_num, attr_words, dim=768, pretrain_path='C:/Users/huni0/FindSUspect/algorithm/VTFPAR++/model/jx_vit_base_p16_224-80ecf9dd.pth'):
+    def __init__(self, attr_num, attr_words, dim=768, pretrain_path='./model/jx_vit_base_p16_224-80ecf9dd.pth'):
         super().__init__()
         super().__init__()
         self.attr_num = attr_num
@@ -98,7 +98,7 @@ def main():
                                 transforms.Resize(size=[224,224]),
                                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     imgs=[]
-    my_sample=sample(files,1)
+    my_sample = files
     for i in my_sample:
         i=os.path.join('person_snapshots',i)
         pil=Image.open(i)

@@ -40,3 +40,10 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+
+algorithm/VTFPAR++/model/ViT-B-16.pt
+algorithm/VTFPAR++/model/jx_vit_base_p16_224-80ecf9dd.pth
+algorithm/VTFPAR++/model/ViT-B-16.pt
+algorithm/VTFPAR++/VTF-Pretrain.pth
+algorithm/OpenPAR/VTFPAR++/model/ViT-B-16.pt
