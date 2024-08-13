@@ -119,7 +119,8 @@ def main():
         
         results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
         
-    print(results_dict)
+    for key, value in results_dict.items():
+        print(f"{key}: {value}")
 
 if __name__ == '__main__':
     main()

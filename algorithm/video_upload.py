@@ -37,10 +37,10 @@ def move_files(src_dir, dst_dir):
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # a.py와 b.py의 경로
-a_path = os.path.join(current_dir, 'video_to_crop', 'crop.py')
+a_path = os.path.join(current_dir, 'crop', 'crop_video.py')
 b_path = os.path.join(current_dir, 'VTFPAR++', 'all_image_test.py')
 
-src_folder = os.path.join(current_dir, 'video_to_crop', 'output_images')
+src_folder = os.path.join(current_dir, 'crop', 'video_output')
 dst_folder = os.path.join(current_dir, 'VTFPAR++', 'person_snapshots')
 
 # Python 파일 실행

@@ -1,15 +1,19 @@
 import cv2
 from ultralytics import YOLO
 import os
+import shutil
+from full_body import is_full_body
+import logging
 
+logging.getLogger("ultralytics").setLevel(logging.ERROR)
 # YOLOv8 모델 로드
-model = YOLO('yolov8n.pt')
+model = YOLO('yolov8n.pt', verbose=False)
 
 # 비디오 파일이 있는 폴더 경로
-video_folder = '/data/FindSuspect/algorithm/video_to_crop/video'
+video_folder = '/data/FindSuspect/algorithm/crop/video'
 
 # 저장할 디렉토리 생성
-output_folder = 'output_images'
+output_folder = 'video_output'
 if os.path.exists(output_folder):
     # 폴더 내의 모든 파일 삭제
     for filename in os.listdir(output_folder):
@@ -44,19 +48,20 @@ for video_file in os.listdir(video_folder):
             frame_count += 1
             if frame_count % interval == 0:
                 # YOLOv8로 객체 감지
+                image_height, image_width = frame.shape[:2]
                 results = model(frame)
                 
                 person_count = 0
                 for r in results:
                     boxes = r.boxes
-                    for box in boxes:
-                        if box.cls == 0:  # 0은 'person' 클래스
+                    for box in boxes :
+                        if box.cls == 0 and is_full_body(box, image_height, image_width):  # 0은 'person' 클래스
                             person_count += 1
                             x1, y1, x2, y2 = map(int, box.xyxy[0])
                             cropped_human = frame[y1:y2, x1:x2]
                             
                             # 크롭된 이미지 저장
-                            output_filename = f'output_images/{os.path.splitext(video_file)[0]}_frame{frame_count}_person{person_count}.jpg'
+                            output_filename = f'{output_folder}/{os.path.splitext(video_file)[0]}_frame{frame_count}_person{person_count}.jpg'
                             cv2.imwrite(output_filename, cropped_human)
 
         video.release()
