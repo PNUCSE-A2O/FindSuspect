@@ -9,6 +9,7 @@ from torchvision import transforms
 from CLIP.clip import clip
 from models.vit import *
 import json
+import cosine
 device= "cuda" if torch.cuda.is_available() else "cpu"
 
 #预训练模型
@@ -29,7 +30,7 @@ attr_words = [
 ]
 
 
-checkpoint=torch.load('./VTF-Pretrain.pth')
+checkpoint=torch.load('VTF-Pretrain.pth')
 #print(checkpoint)
 
 
@@ -84,6 +85,16 @@ class TransformerClassifier(nn.Module):
 
 #trainer
 
+def save_json(file_name, data):
+    # 파일이 존재하는지 확인하고, 있으면 삭제
+    if os.path.exists(file_name):
+        print(f"'{file_name}' 파일이 존재합니다. 삭제 후 다시 생성합니다.")
+        os.remove(file_name)
+    else:
+        print(f"'{file_name}' 파일이 존재하지 않습니다. 새로 생성합니다.")
+    # 파일 생성 및 JSON 형식으로 저장
+    with open(file_name, 'w') as f:
+        json.dump(data, f)  # JSON 형식으로 딕셔너리를 저장
 
 
 def main():
@@ -98,40 +109,44 @@ def main():
     trans = transforms.Compose([transforms.ToTensor(),
                                 transforms.Resize(size=[224,224]),
                                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    
-    results_dict = {}  # 결과를 저장할 딕셔너리
-
-    for file in files:
-        imgs=[]
-        i=os.path.join('person_snapshots',file)
+    imgs=[]
+    my_sample=sample(files,1)
+    for i in my_sample:
+        i=os.path.join('suspect_snapshot',i)
         pil=Image.open(i)
         pil=trans(pil)
         imgs.append(pil)
-        imgs=torch.stack(imgs)
-        imgs=imgs.to(device)
-        valid_logits=model(imgs,ViT_model)
-        
-        result=valid_logits.squeeze()
-        result=torch.sigmoid(result)
-        result=result.tolist()
-        #포즈 제외하고 배열에 추가
-        result=[value for index, value in enumerate(result) if index < 9 or index > 15]
-        result=[round(value, 4) for value in result]
-        
-        results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
-        
-    file_name = "features.json"
-    # 파일이 존재하는지 확인하고, 있으면 삭제
-    if os.path.exists(file_name):
-        print(f"'{file_name}' 파일이 존재합니다. 삭제 후 다시 생성합니다.")
-        os.remove(file_name)
-    else:
-        print(f"'{file_name}' 파일이 존재하지 않습니다. 새로 생성합니다.")
-    # 파일 생성 및 JSON 형식으로 저장
-    with open(file_name, 'w') as f:
-        json.dump(results_dict, f)  # JSON 형식으로 딕셔너리를 저장
-    for key, value in results_dict.items():
-        print(f"{key}: {value}")
+    imgs=torch.stack(imgs)
+    imgs=imgs.to(device)
+
+    result=model(imgs,ViT_model)
+    result=result.squeeze()
+    result=torch.sigmoid(result)
+    # print(result)
+    result=result.tolist()
+    #포즈 제외하고 배열에 추가
+    result=[value for index, value in enumerate(result) if index < 9 or index > 15]
+    result=[round(value, 4) for value in result]
+    
+    #TODO : 파일로 저장해도됨
+
+    top_5 = cosine.get_similarity(result)
+    save_json("result.json", top_5)
+    
+
 
 if __name__ == '__main__':
     main()
+
+    # result_bool = []
+    # for i in result:
+    #     if(i > 0.6):
+    #         result_bool.append(True)
+    #     else:
+    #         result_bool.append(False)
+    # # print(result_bool)
+    # attr_result = []
+    # for idx, value in enumerate(result_bool):
+    #     if(value):
+    #         attr_result.append(attr_words[idx])
+    # print(attr_result)
