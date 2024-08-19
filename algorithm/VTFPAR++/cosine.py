@@ -1,16 +1,22 @@
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import json
 
-# 주어진 리스트
-list1 = [0.5948, 0.7403, 0.0059, 0.3647, 0.395, 0.0017, 0.9989, 0.9997, 0.0, 0.3797, 0.3667, 0.0011, 0.4184, 0.1476, 0.3787, 0.3192, 0.2928, 0.7427, 0.9999, 0.2572, 0.1022, 0.9439, 1.0, 0.3878, 0.0111, 0.5541, 0.9127, 0.2911, 0.2797, 0.0014, 0.1122, 0.248, 0.7332, 0.9874, 0.0056, 0.1195]
-# 비교할 다른 리스트
-list2 = [0.1915, 0.7113, 0.0546, 0.0758, 0.9073, 0.0042, 0.9591, 0.9926, 0.0, 0.4876, 0.1189, 0.0922, 0.2889, 0.0556, 0.2233, 0.0581, 0.0096, 0.4204, 0.9797, 0.302, 0.1635, 0.9721, 1.0, 0.3952, 0.1979, 0.3044, 0.747, 0.5131, 0.3998, 0.0004, 0.0772, 0.8613, 0.7724, 0.9438, 0.0235, 0.3186]
+def get_similarity(feature):
+    file_name = "features.json"
+    result = {}
+    with open(file_name, 'r') as f:
+        data = json.load(f)  # 파일의 내용을 딕셔너리로 로드
 
-# 벡터화
-vec1 = np.array(list1).reshape(1, -1)
-vec2 = np.array(list2).reshape(1, -1)
-
-# 코사인 유사도 계산
-similarity = cosine_similarity(vec1, vec2)
-
-print(similarity)
+    # 딕셔너리 형태로 변환된 데이터 순회
+    for key, value in data.items():
+        # 벡터화
+        vec1 = np.array(feature).reshape(1, -1)
+        vec2 = np.array(value).reshape(1, -1)
+        print(f'{key}: {value}')  # key와 배열 값 출력
+        # 코사인 유사도 계산
+        similarity = cosine_similarity(vec1, vec2)
+        result[key] = similarity
+        
+    top_5 = dict(sorted(result.items(), key=lambda item: item[1], reverse=True)[:5])    
+    return top_5
