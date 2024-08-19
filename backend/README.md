@@ -16,7 +16,7 @@ post /api/upload/image
 
 imageFile에 이미지 넣고 요청
 
-저장경로 src/main/frontend/uploads/image
+저장경로 src/main/frontend/server/uploads/image
 <br>
 기존 업로드에서 영상 하나만 넣고 전송하면됨 
 <br>
@@ -31,26 +31,25 @@ get /api/get/image
 get /api/get/video
 
 uploads로부터 시작하는 파일경로 return
+ex)uploads/video/sample.mp4
 <br>
 react경로 수정 필요하면 말해주시면 됩니다.
 
 
 ## 결과
-python에서 결과가 "시간:정확도" 를 한줄씩 출력해야함
-"00:01:13:83"
-"00:02:33:55"
-
 
 get /api/result
 [
-  {
-    "time": "00:01:13",
-    "accuracy": 83
-  },
-  {
-    "time": "00:02:33",
-    "accuracy": 55
-  }
+    {
+        "imageName": "image1.png",
+        "time": "00:01",
+        "accuracy": 85
+    },
+    {
+        "imageName": "image2.png",
+        "time": "00:02",
+        "accuracy": 90
+    }
 ]
 
 
