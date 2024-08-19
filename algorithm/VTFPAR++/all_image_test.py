@@ -8,6 +8,7 @@ from PIL import Image
 from torchvision import transforms
 from CLIP.clip import clip
 from models.vit import *
+import json
 device= "cuda" if torch.cuda.is_available() else "cpu"
 
 #预训练模型
@@ -119,6 +120,16 @@ def main():
         
         results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
         
+    file_name = "features.json"
+    # 파일이 존재하는지 확인하고, 있으면 삭제
+    if os.path.exists(file_name):
+        print(f"'{file_name}' 파일이 존재합니다. 삭제 후 다시 생성합니다.")
+        os.remove(file_name)
+    else:
+        print(f"'{file_name}' 파일이 존재하지 않습니다. 새로 생성합니다.")
+    # 파일 생성 및 JSON 형식으로 저장
+    with open(file_name, 'w') as f:
+        json.dump(results_dict, f)  # JSON 형식으로 딕셔너리를 저장
     for key, value in results_dict.items():
         print(f"{key}: {value}")
 

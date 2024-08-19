@@ -38,10 +38,10 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # a.py와 b.py의 경로
 a_path = os.path.join(current_dir, 'crop', 'crop_image.py')
-b_path = os.path.join(current_dir, 'VTFPAR++', 'all_image_test.py')
+b_path = os.path.join(current_dir, 'VTFPAR++', 'one_image_test.py')
 
 src_folder = os.path.join(current_dir, 'crop', 'image_output')
-dst_folder = os.path.join(current_dir, 'VTFPAR++', 'person_snapshots')
+dst_folder = os.path.join(current_dir, 'VTFPAR++', 'suspect_snapshots')
 
 # Python 파일 실행
 run_python_file(a_path)
