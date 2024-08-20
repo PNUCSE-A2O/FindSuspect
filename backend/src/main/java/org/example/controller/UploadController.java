@@ -20,9 +20,6 @@ public class UploadController {
     @Autowired
     UploadService uploadService;
 
-    private final String UPLOAD_DIR_VIDEO = "src/main/frontend/server/uploads/video/";
-    private final String UPLOAD_DIR_IMAGE = "src/main/frontend/server/uploads/image/";
-
     @GetMapping("/")
     public String mainPage(){
         return "upload";
@@ -39,6 +36,7 @@ public class UploadController {
         return ResponseEntity.ok("정상 업로드");
     }
 
+    @PostMapping("/api/upload/video")
     public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile videoFile) {
         try {
             uploadService.uploadVideo(videoFile);
@@ -70,11 +68,11 @@ public class UploadController {
         return new ResponseEntity<>(videoPath, HttpStatus.OK);
     }
 
-    @GetMapping("/api/result")
-    public ResponseEntity<List<ResponseDto>> getResult(){
-        List<ResponseDto> responseDtoList = uploadService.getResult();
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-    }
+    // @GetMapping("/api/result")
+    // public ResponseEntity<List<ResponseDto>> getResult(){
+    //     List<ResponseDto> responseDtoList = uploadService.getResult();
+    //     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    // }
 
 
 

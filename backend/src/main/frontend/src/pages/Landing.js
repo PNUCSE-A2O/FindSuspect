@@ -12,7 +12,7 @@ const Landing = () => {
         axios.get('/api/get/video')
         .then(response => {
             if(response.data.success){
-                const paths = response.data.videoPaths;
+                const paths = response.data;
                 if(paths.length > 0){
                     setLatestVideoPath(paths[paths.length - 1]);
                 } else {
@@ -44,7 +44,7 @@ return (
                                 controls
                                 style={{ width: '100%', height: '100%' }}
                             >
-                                <source src={`http://localhost:5000${latestVideoPath}`} type="video/mp4" />
+                                <source src={`${latestVideoPath}`} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
                         ) : (

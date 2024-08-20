@@ -1,4 +1,4 @@
 package org.example.dto;
 
-public record ResponseDto(String time, int accuracy) {
+public record ResponseDto(String imageName, String time, int accuracy) {
 }
