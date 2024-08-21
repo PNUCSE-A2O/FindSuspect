@@ -11,10 +11,12 @@ const Landing = () => {
     useEffect(() => {
         axios.get('/api/get/video')
         .then(response => {
-            if(response.data.success){
+            console.log(response.data);
+            if(response){
                 const paths = response.data;
+                console.log(paths);
                 if(paths.length > 0){
-                    setLatestVideoPath(paths[paths.length - 1]);
+                    setLatestVideoPath(paths);
                 } else {
                     alert('비디오 경로를 가져오는데 실패했습니다.');
                 }
