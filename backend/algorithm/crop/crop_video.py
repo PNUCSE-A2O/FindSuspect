@@ -7,7 +7,7 @@ import logging
 
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 # YOLOv8 모델 로드
-model = YOLO('yolov8n.pt', verbose=False)
+model = YOLO('yolov10n.pt', verbose=False)
 
 # 비디오 파일이 있는 폴더 경로
 video_folder = '/data/FindSuspect/backend/src/main/frontend/public/video'
