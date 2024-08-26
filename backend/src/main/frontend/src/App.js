@@ -3,6 +3,7 @@ import React from 'react';
 import AppRoutes from './AppRoutes';
 import {BrowserRouter} from "react-router-dom";
 //import adminUpload from './pages/adminUpload';
+import { LoadingContextProvider } from './context/LoadingContext';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
@@ -22,9 +23,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <BrowserRouter>
-        <AppRoutes/>
-      </BrowserRouter>
+      <LoadingContextProvider>
+        <BrowserRouter>
+          <AppRoutes/>
+        </BrowserRouter>
+      </LoadingContextProvider>
     </ThemeProvider>
   );
 }

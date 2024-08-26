@@ -40,11 +40,11 @@ return (
             </Typography>
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" mb={3}>
                 <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '30px' }}>
-                    <CardContent>
+                    <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
                     {latestVideoPath ? (
                             <video
                                 controls
-                                style={{ width: '100%', height: '100%' }}
+                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                             >
                                 <source src={`${latestVideoPath}`} type="video/mp4" />
                                 Your browser does not support the video tag.

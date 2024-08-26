@@ -1,51 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import HeaderAppBar from '../components/HeaderAppBar';
-import { Container, Typography, Box, Card, CardContent, CardMedia, Table, TableBody, TableCell, TableRow, TableContainer, Paper } from '@mui/material';
+import { useLoadingState } from '../context/LoadingContext';
+//import HeaderAppBar from '../components/HeaderAppBar';
+import { Container, Typography, Box, Card, CardContent, Table, TableBody, TableCell, TableRow, TableContainer, Paper } from '@mui/material';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
 
 const Result = () => {
+    const {loading, setLoading} = useLoadingState();
     const [latestImagePath, setLatestImagePath] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [resultData, setResultData] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/get/image')
-            .then(response => {
-                if (response.data.success) {
-                    const paths = response.data.imagePaths;
-                    if (paths.length > 0) {
-                        setLatestImagePath(paths[paths.length - 1]);
-                    }
+        setLoading(true);
+        axios.get('/api/get/image')
+        .then(response => {
+            console.log(response.data);
+            if(response){
+                const paths = response.data;
+                console.log(paths);
+                if(paths.length > 0){
+                    setLatestImagePath(paths);
                 } else {
-                    alert('이미지 경로를 가져오는 데 실패했습니다.');
+                    alert('이미지 경로를 가져오는데 실패했습니다.');
                 }
+            }
+        })
+        .catch(error => {
+            console.error('이미지 경로를 가져오는 중 오류 발생');
+        })
+    }, []);
+    
+    
+    useEffect(() => {
+        setLoading(true);
+        axios.get('/api/result')
+            .then(response => {
+                setLoading(false);
+                setResultData(response.data); 
             })
             .catch(error => {
-                console.error('이미지 경로를 가져오는 중 오류 발생:', error);
-            })
-            .finally(() => {
-                setLoading(false);
+                console.error('결과 데이터를 가져오는 중 오류 발생:', error);
             });
     }, []);
-
+    /*
+    useEffect(() => {
+        const testData = [
+            { imageName: "image1.jpg", time: "2024-08-24T10:00:00", accuracy: 95 },
+            { imageName: "image2.jpg", time: "2024-08-24T11:00:00", accuracy: 88 },
+            { imageName: "image3.jpg", time: "2024-08-24T12:00:00", accuracy: 76 }
+        ];
+        setResultData(testData);
+        setLoading(false); // 로딩 상태 종료
+    }, []);
+    */
     return (
         <>
             <UserHeaderAppBar/>
             <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px' }}>
                 <Box display="flex" flexDirection="column" alignItems="center" >
                     <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '30px'  }}>
+                        <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
                         {loading ? (
                             <Typography variant="h6">Loading...</Typography>
                         ) : latestImagePath ? (
-                            <CardMedia
-                                component="img"
-                                height="100%"
-                                image={`http://localhost:5000${latestImagePath}`}
-                                alt="Uploaded"
+                            <img
+                                src={`${latestImagePath}`}
+                                alt="Latest"
+                                style={{ width: '100%', height: '100%', objectFit: 'scale-down' }}
                             />
                         ) : (
-                            <Typography variant="h6">업로드 된 이미지가 없습니다.</Typography>
+                            <Typography>No image available</Typography>
                         )}
+                        </CardContent>
                     </Card>
                     <TableContainer component={Paper} sx={{ maxWidth: 400 }}>
                         <Table>
@@ -54,18 +80,18 @@ const Result = () => {
                                     <TableCell align="center">Time</TableCell>
                                     <TableCell align="center">Accuracy</TableCell>
                                 </TableRow>
-                                <TableRow>
-                                    <TableCell align="center">00:07:15</TableCell>
-                                    <TableCell align="center">83%</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="center">00:07:15</TableCell>
-                                    <TableCell align="center">83%</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="center">00:07:15</TableCell>
-                                    <TableCell align="center">83%</TableCell>
-                                </TableRow>
+                                {resultData.length > 0 ? (
+                                    resultData.map((result, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="center">{result.time}</TableCell>
+                                            <TableCell align="center">{result.accuracy}%</TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell align="center" colSpan={2}>No Results Available</TableCell>
+                                    </TableRow>
+                                )} 
                             </TableBody>
                         </Table>
                     </TableContainer>

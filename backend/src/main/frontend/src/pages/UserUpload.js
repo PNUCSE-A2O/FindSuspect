@@ -1,17 +1,18 @@
 import { Container, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useLoadingState } from '../context/LoadingContext';
 import FileUpload from '../components/FileUpload';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
 import ImageUploader from '../components/ImageUploader';
 
 const UserUpload = () => {
     const navigate = useNavigate();
+    const {loading, setLoading} = useLoadingState();
 
     const handleClick = () => {
+        setLoading(true);
         navigate('/userLoading');
-        setTimeout(() => {
-            navigate('/result');
-        }, 10000); 
     };
     
     return (

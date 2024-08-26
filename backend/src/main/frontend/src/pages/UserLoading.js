@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useLoadingState } from '../context/LoadingContext';
 import { Container, Typography, CircularProgress, Box, Card, CardContent, CardMedia } from '@mui/material';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
 
 const UserLoading = () => {
+    const navigate = useNavigate();
+    const {loading, setLoading} = useLoadingState();
     const [latestImagePath, setLatestImagePath] = useState(null);
-    const [loading, setLoading] = useState(true);
+
+    const finishLoading = () => {
+        setLoading(false);
+        navigate('/result');
+    }
 
     useEffect(() => {
+        setLoading(true);
         axios.get('/api/get/image')
-            .then(response => {
-                if (response.data.success) {
-                    const paths = response.data.imagePaths;
-                    if (paths.length > 0) {
-                        setLatestImagePath(paths[paths.length - 1]);
-                    }
+        .then(response => {
+            console.log(response.data);
+            if(response){
+                const paths = response.data;
+                console.log(paths);
+                if(paths.length > 0){
+                    setLatestImagePath(paths);
+                    finishLoading();
                 } else {
-                    alert('이미지 경로를 가져오는 데 실패했습니다.');
+                    alert('이미지 경로를 가져오는데 실패했습니다.');
                 }
-            })
-            .catch(error => {
-                console.error('이미지 경로를 가져오는 중 오류 발생:', error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            }
+        })
+        .catch(error => {
+            console.error('이미지 경로를 가져오는 중 오류 발생');
+            navigate('/UserUpload');
+        })
     }, []);
 
     return (
@@ -42,12 +52,13 @@ const UserLoading = () => {
                     ) : (
                         latestImagePath ? (
                             <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '30px' }}>
-                                <CardMedia
-                                    component="img"
-                                    height="100%"
-                                    image={`http://localhost:5000${latestImagePath}`}
-                                    alt="Uploaded"
-                                />
+                                <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
+                                <img
+                                src={`${latestImagePath}`}
+                                alt="Latest"
+                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                            />
+                                </CardContent>
                             </Card>
                         ) : (
                             <Typography variant="body1">
