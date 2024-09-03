@@ -6,6 +6,8 @@ import UserLoading from './pages/UserLoading';
 import UserUpload from './pages/UserUpload';
 import Result from './pages/Result';
 import Landing from './pages/Landing';
+import Home from './pages/Home';
+import EnterPassword from './pages/EnterPassword';
 
 const AppRoutes = () => {
     return (
@@ -16,6 +18,8 @@ const AppRoutes = () => {
             <Route path="/result" element={<Result />} />
             <Route path="/userLoading" element={<UserLoading />} />
             <Route path="/userUpload" element={<UserUpload />} />
+            <Route path='/home' element={<Home/>} />
+            <Route path='/password' element={<EnterPassword/>} />
         </Routes>
     );
 };

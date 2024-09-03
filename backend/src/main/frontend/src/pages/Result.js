@@ -8,6 +8,7 @@ import UserHeaderAppBar from '../components/UserHeaderAppBar';
 const Result = () => {
     const {loading, setLoading} = useLoadingState();
     const [latestImagePath, setLatestImagePath] = useState(null);
+    const [latestVideoPath, setLatestVideoPath] = useState(null);
     const [resultData, setResultData] = useState([]);
 
     useEffect(() => {
@@ -29,7 +30,26 @@ const Result = () => {
             console.error('이미지 경로를 가져오는 중 오류 발생');
         })
     }, []);
-    
+
+    useEffect(() => {
+        setLoading(true);
+        axios.get('/api/get/video')
+        .then(response => {
+            console.log(response.data);
+            if(response){
+                const paths = response.data;
+                console.log(paths);
+                if(paths.length > 0){
+                    setLatestVideoPath(paths);
+                } else {
+                    alert('비디오 경로를 가져오는데 실패했습니다.');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('비디오 경로를 가져오는 중 오류 발생');
+        })
+    }, []);
     
     useEffect(() => {
         setLoading(true);
@@ -42,37 +62,45 @@ const Result = () => {
                 console.error('결과 데이터를 가져오는 중 오류 발생:', error);
             });
     }, []);
-    /*
-    useEffect(() => {
-        const testData = [
-            { imageName: "image1.jpg", time: "2024-08-24T10:00:00", accuracy: 95 },
-            { imageName: "image2.jpg", time: "2024-08-24T11:00:00", accuracy: 88 },
-            { imageName: "image3.jpg", time: "2024-08-24T12:00:00", accuracy: 76 }
-        ];
-        setResultData(testData);
-        setLoading(false); // 로딩 상태 종료
-    }, []);
-    */
+    
+
     return (
         <>
             <UserHeaderAppBar/>
             <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px' }}>
                 <Box display="flex" flexDirection="column" alignItems="center" >
-                    <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '30px'  }}>
-                        <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
-                        {loading ? (
-                            <Typography variant="h6">Loading...</Typography>
-                        ) : latestImagePath ? (
-                            <img
-                                src={`${latestImagePath}`}
-                                alt="Latest"
-                                style={{ width: '100%', height: '100%', objectFit: 'scale-down' }}
-                            />
-                        ) : (
-                            <Typography>No image available</Typography>
-                        )}
-                        </CardContent>
-                    </Card>
+                    <Box display="flex" flexDirection="row" justifyContent="center" mb={4} sx={{ gap: 3 }}>
+                        <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
+                            {latestVideoPath ? (
+                                <video
+                                    controls
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                >
+                                    <source src={`${latestVideoPath}`} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <Typography>No video available</Typography>
+                            )}
+                            </CardContent>
+                        </Card>
+                        <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
+                            {loading ? (
+                                <Typography variant="h6">Loading...</Typography>
+                            ) : latestImagePath ? (
+                                <img
+                                    src={`${latestImagePath}`}
+                                    alt="Latest"
+                                    style={{ width: '100%', height: '100%', objectFit: 'scale-down' }}
+                                />
+                            ) : (
+                                <Typography>No image available</Typography>
+                            )}
+                            </CardContent>
+                        </Card>
+                    </Box>
                     <TableContainer component={Paper} sx={{ maxWidth: 400 }}>
                         <Table>
                             <TableBody>
