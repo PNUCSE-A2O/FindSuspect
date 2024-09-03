@@ -68,11 +68,11 @@ public class UploadController {
         return new ResponseEntity<>(videoPath, HttpStatus.OK);
     }
 
-    // @GetMapping("/api/result")
-    // public ResponseEntity<List<ResponseDto>> getResult(){
-    //     List<ResponseDto> responseDtoList = uploadService.getResult();
-    //     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-    // }
+    @GetMapping("/api/result")
+    public ResponseEntity<List<ResponseDto>> getResult(){
+        List<ResponseDto> responseDtoList = uploadService.getResult();
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    }
 
 
 

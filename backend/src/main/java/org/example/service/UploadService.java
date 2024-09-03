@@ -29,9 +29,45 @@ public class UploadService {
 
     private final int FPS = 30;
 
+    private boolean checkCuda() {
+        try {
+            // CUDA 확인을 위한 Python 스크립트 실행 명령어
+            String command = "python algorithm/cuda.py";
+
+            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+            processBuilder.redirectErrorStream(true);
+            processBuilder.directory(new java.io.File(".")); // 프로젝트 루트 디렉토리 설정
+
+            Process process = processBuilder.start();
+            
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            boolean cudaAvailable = false;
+            
+            while ((line = reader.readLine()) != null) {
+                // System.out.println(line);
+                if (line.trim().equalsIgnoreCase("True")) {
+                    cudaAvailable = true;
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                System.err.println("CUDA 확인 중 오류 발생");
+                return false;
+            }
+
+            return cudaAvailable;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private void videoPython(){
         try {
             // Python 스크립트 실행 명령어
+            if (!checkCuda()) throw new Exception("cuda사용 안됨");
             String command = "python algorithm/video_upload.py"; // Windows 사용 시 "python script.py"로 변경
 
             // 프로세스 빌더 설정
@@ -41,24 +77,11 @@ public class UploadService {
 
             // 프로세스 시작
             Process process = processBuilder.start();
-
-            // // 프로세스 출력 읽기
-            // BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            // String line;
-
-            // while ((line = reader.readLine()) != null) {
-            //     output.append(line).append("\n");
-            //     System.out.println(line);
-            //     List<String> str = Arrays.stream(line.split(",")).toList();
-            //     response.add(new ResponseDto(str.get(0),Integer.parseInt(str.get(1))));
-            // }
-
             // // 프로세스 종료 대기
             int exitCode = process.waitFor();
             if(exitCode != 0) throw new Exception("영상 feature 오류");
         } catch (Exception e) {
             e.printStackTrace();
-//            output.append("Error: ").append(e.getMessage());
         }
 
     }
@@ -66,6 +89,7 @@ public class UploadService {
     private void imagePython(){
         try {
             // Python 스크립트 실행 명령어
+            if (!checkCuda()) throw new Exception("cuda사용 안됨");
             String command = "python algorithm/image_upload.py"; // Windows 사용 시 "python script.py"로 변경
 
             // 프로세스 빌더 설정
