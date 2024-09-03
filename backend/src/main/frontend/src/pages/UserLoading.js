@@ -33,6 +33,7 @@ const UserLoading = () => {
         })
         .catch(error => {
             console.error('이미지 경로를 가져오는 중 오류 발생');
+            alert('이미지 경로 오류');
             navigate('/UserUpload');
         })
     }, []);

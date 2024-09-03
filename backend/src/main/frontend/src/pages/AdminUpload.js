@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderAppBar from '../components/HeaderAppBar';
+import { useLoadingState } from '../context/LoadingContext';
 import { Container, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import FileUpload from '../components/FileUpload';
@@ -7,13 +8,7 @@ import FileUpload from '../components/FileUpload';
 
 const AdminUpload = () => {
     const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate('/adminLoading');
-        setTimeout(() => {
-            navigate('/');
-        }, 5000); 
-    };
+    const {loading, setLoading} = useLoadingState();
 
     return (
         <>
@@ -22,11 +17,7 @@ const AdminUpload = () => {
             <Typography className="landing-text" variant="h4" style={{marginBottom: '20px', fontWeight: 'bold'}}>
                 Suspicious Video
             </Typography>
-            <FileUpload/>
-            <Button className="pulse" variant="contained" color="secondary" sx={{ borderRadius: 5 }} size="large"
-                    onClick={handleClick} style={{ marginTop: '30px', textTransform: 'none', fontWeight: 'bold' }}>
-                    check
-            </Button>
+            <FileUpload />
         </Container>
         </>
     );

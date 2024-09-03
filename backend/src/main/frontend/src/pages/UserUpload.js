@@ -22,10 +22,6 @@ const UserUpload = () => {
                 Put Suspect's Image
             </Typography>
             <FileUpload/>
-            <Button className="pulse" variant="contained" color="secondary" sx={{ borderRadius: 5 }} size="large"
-                    onClick={handleClick} style={{ marginTop: '30px', textTransform: 'none', fontWeight: 'bold' }}>
-                    check
-            </Button>
         </Container>
         </>
     );

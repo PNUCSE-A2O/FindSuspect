@@ -1,7 +1,14 @@
 import HeaderAppBar from '../components/HeaderAppBar';
 import { Container, Typography, CircularProgress } from '@mui/material';
+import { useLoadingState } from '../context/LoadingContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLoading = () => {
+    const navigate = useNavigate();
+    const { loading, setLoading } = useLoadingState();
+
+    
+
     return (
         <>
         <HeaderAppBar/>
