@@ -12,7 +12,6 @@ const Result = () => {
     const [resultData, setResultData] = useState([]);
 
     useEffect(() => {
-        setLoading(true);
         axios.get('/api/get/image')
         .then(response => {
             console.log(response.data);
@@ -32,7 +31,6 @@ const Result = () => {
     }, []);
 
     useEffect(() => {
-        setLoading(true);
         axios.get('/api/get/video')
         .then(response => {
             console.log(response.data);

@@ -4,10 +4,6 @@ import { useLoadingState } from '../context/LoadingContext';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLoading = () => {
-    const navigate = useNavigate();
-    const { loading, setLoading } = useLoadingState();
-
-    
 
     return (
         <>

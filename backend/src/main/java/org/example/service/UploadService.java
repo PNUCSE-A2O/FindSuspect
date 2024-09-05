@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.io.OutputStream;
 
 @Service
 public class UploadService {
@@ -142,7 +143,7 @@ public class UploadService {
 
     public void uploadImage(MultipartFile imageFile) throws IOException {
         try {
-            saveFile(UPLOAD_DIR_IMAGE, imageFile);
+            saveFile(UPLOAD_DIR_IMAGE, imageFile, false);
         } catch (IOException e) {
             throw new IOException("이미지 저장 실패");
         }
@@ -150,35 +151,25 @@ public class UploadService {
 
     }
 
-    private void saveFile(String dir, MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        Path targetPath = Paths.get(dir + fileName);
-        Path oldFilePath = null;
+    private void saveFile(String dir, MultipartFile file, boolean type) throws IOException {
+        String fileName = type?"video":"image";
+        String ext = file.getOriginalFilename().split("\\.")[1];
+        //String fileName = file.getOriginalFilename();
+        
+        Path targetPath = Paths.get(dir + fileName+"."+ext);
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dir))) {
-            for (Path path : stream) {
-                if (Files.isRegularFile(path)) {
-                    oldFilePath = path;
-                    break;
-                }
-            }
-        }
-
-        try {
-            byte[] bytes = file.getBytes();
-            Files.write(targetPath, bytes);
-
-            if (oldFilePath != null && !oldFilePath.equals(targetPath)) {
-                Files.delete(oldFilePath);
-            }
+			
+        // 해당 path 에 파일의 스트림 데이터를 저장
+        try (OutputStream os = Files.newOutputStream(targetPath)) {
+            os.write(file.getBytes());
         } catch (IOException e) {
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
     public void uploadVideo(MultipartFile videoFile) throws IOException{
         try{
-            saveFile(UPLOAD_DIR_VIDEO, videoFile);
+            saveFile(UPLOAD_DIR_VIDEO, videoFile, true);
         }catch(IOException e){
             throw new IOException("저장 실패");
         }

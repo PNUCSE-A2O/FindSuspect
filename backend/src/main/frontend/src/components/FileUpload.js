@@ -56,6 +56,7 @@ function FileUpload() {
 
     const dropHandler = (files) => {
         setFile2send(files);
+        console.log(files);
         setTimeout(() => {setIsDisabled(false);}, 1000);
         
     };
