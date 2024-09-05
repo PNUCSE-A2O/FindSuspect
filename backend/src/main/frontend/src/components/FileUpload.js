@@ -26,8 +26,6 @@ function FileUpload() {
         const uploadUrl = fileType === 'image' ? '/api/upload/image' : '/api/upload/video';
         if(fileType == 'image'){
             navigate('/userLoading');
-        } else {
-            navigate('/adminLoading');
         }
         console.log(file2send);
         
@@ -37,13 +35,14 @@ function FileUpload() {
                 if (response.statusText == 'OK') {
                     if (fileType === 'image') {
                         setImages([...imageFile, response.data.filePath]);
+                        navigate('/result');
                     } else if (fileType === 'video') {
                         setVideos([...videoFile, response.data.filePath]);
                         alert('파일 업로드 완료');
                         navigate('/Home');
+                        setLoading(false);
+                        setIsDisabled(true);
                     }
-                    setLoading(false);
-                    setIsDisabled(true);
 
                 } else {
                     alert('파일 저장 실패');

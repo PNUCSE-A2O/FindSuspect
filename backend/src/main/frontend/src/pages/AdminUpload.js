@@ -4,7 +4,7 @@ import { useLoadingState } from '../context/LoadingContext';
 import { Container, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import FileUpload from '../components/FileUpload';
-
+import AdminLoading from '../components/AdminLoading';
 
 const AdminUpload = () => {
     const navigate = useNavigate();
@@ -14,10 +14,16 @@ const AdminUpload = () => {
         <>
         <HeaderAppBar/>
         <Container maxWidth="md" style={{textAlign: 'center', marginTop: '50px'}}>
-            <Typography className="landing-text" variant="h4" style={{marginBottom: '20px', fontWeight: 'bold'}}>
-                Suspicious Video
-            </Typography>
-            <FileUpload />
+            {loading ? 
+                <AdminLoading/> : 
+                <>
+                <Typography className="landing-text" variant="h4" style={{marginBottom: '20px', fontWeight: 'bold'}}>
+                    Suspicious Video
+                </Typography>
+                <FileUpload />
+                </>
+            }
+            
         </Container>
         </>
     );
