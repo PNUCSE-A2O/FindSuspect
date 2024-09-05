@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("164.125.252.182:8900") // 프론트엔드가 실행되는 도메인
+                        .allowedOrigins("http://164.125.252.182:8900") // 프론트엔드가 실행되는 도메인
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
