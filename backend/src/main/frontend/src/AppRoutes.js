@@ -14,7 +14,6 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/adminUpload" element={<AdminUpload />} />
-            
             <Route path="/" element={<Landing />} />
             <Route path="/result" element={<Result />} />
             <Route path="/userLoading" element={<UserLoading />} />

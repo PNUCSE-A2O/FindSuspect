@@ -1,6 +1,6 @@
 import HomeHeaderAppBar from "../components/HomeHeaderAppBar";
 import { Container, Typography, Button, Box, Card, CardContent } from "@mui/material";
-import cctv from '../picture/cctv.png'
+import home_image from '../picture/home_image.png'
 import { useNavigate } from "react-router-dom";
 import { useLoadingState } from "../context/LoadingContext";
 
@@ -21,10 +21,10 @@ const Home = () => {
                 Find Suspect from Video
             </Typography>
             <Box display="flex" flexDirection="column" alignItems="center" >
-                <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Card sx={{ width: 600, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
                         <img
-                                src={`${cctv}`}
+                                src={`${home_image}`}
                                 alt="Latest"
                                 style={{ width: '100%', height: '100%', objectFit: 'scale-down' }}
                         />  

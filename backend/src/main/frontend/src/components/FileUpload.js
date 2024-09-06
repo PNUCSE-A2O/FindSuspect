@@ -32,13 +32,14 @@ function FileUpload() {
         axios.post(uploadUrl, formData, config)
             .then(response => {
                 console.log(response);
-                if (response.statusText == 'OK') {
+                if (response.status === 200) {
                     if (fileType === 'image') {
                         setImages([...imageFile, response.data.filePath]);
+                        alert('이미지 업로드 완료');
                         navigate('/result');
                     } else if (fileType === 'video') {
                         setVideos([...videoFile, response.data.filePath]);
-                        alert('파일 업로드 완료');
+                        alert('비디오 업로드 완료');
                         navigate('/Home');
                         setLoading(false);
                         setIsDisabled(true);
