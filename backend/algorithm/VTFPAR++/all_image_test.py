@@ -1,4 +1,6 @@
 import os
+import sys
+
 import cv2
 from random import sample
 import numpy as np
@@ -9,6 +11,7 @@ from torchvision import transforms
 from CLIP.clip import clip
 from models.vit import *
 import json
+
 device= "cuda" if torch.cuda.is_available() else "cpu"
 
 #预训练模型
@@ -93,7 +96,7 @@ def main():
     checkpoint=torch.load('VTF-Pretrain.pth')
     model.load_state_dict(checkpoint['model_state_dict'],strict=False)
     start_epoch=1
-    files = os.listdir('person_snapshots')
+    files = os.listdir(sys.argv[0])
 
     trans = transforms.Compose([transforms.ToTensor(),
                                 transforms.Resize(size=[224,224]),
@@ -120,7 +123,7 @@ def main():
         
         results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
         
-    file_path = "features.json"
+    file_path = sys.argv[0]+".json"
 
     # 파일이 존재하는지 확인하고, 있으면 삭제
     if os.path.exists(file_path):

@@ -143,22 +143,26 @@ public class UploadService {
 
     public void uploadImage(MultipartFile imageFile) throws IOException {
         try {
-            saveFile(UPLOAD_DIR_IMAGE, imageFile, false);
+            saveFile(UPLOAD_DIR_IMAGE, imageFile);
         } catch (IOException e) {
             throw new IOException("이미지 저장 실패");
         }
         imagePython();
 
     }
+    private void CheckFolder(String fileName){
+        String path = "/data/FindSuspect/backend/src/main/frontend/public/video/"+fileName;
+        File folder = new File(path);
+        if (folder.exists() && folder.isDirectory()) {
+            // 폴더가 존재하면 예외 발생
+            throw new Exception("같은 이름의 영상이 이미 존재합니다");
 
-    private void saveFile(String dir, MultipartFile file, boolean type) throws IOException {
-        String fileName = type?"video":"image";
-        String ext = file.getOriginalFilename().split("\\.")[1];
-        //String fileName = file.getOriginalFilename();
-        
-        Path targetPath = Paths.get(dir + fileName+"."+ext);
+    }
+    private void saveFile(String dir, MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        CheckFolder(fileName);
+        Path targetPath = Paths.get(dir + fileName);
 
-			
         // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(targetPath)) {
             os.write(file.getBytes());
@@ -169,7 +173,7 @@ public class UploadService {
 
     public void uploadVideo(MultipartFile videoFile) throws IOException{
         try{
-            saveFile(UPLOAD_DIR_VIDEO, videoFile, true);
+            saveFile(UPLOAD_DIR_VIDEO, videoFile);
         }catch(IOException e){
             throw new IOException("저장 실패");
         }

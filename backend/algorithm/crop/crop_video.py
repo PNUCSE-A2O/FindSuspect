@@ -4,6 +4,7 @@ import os
 import shutil
 from full_body import is_full_body
 import logging
+import  sys
 
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 # YOLOv8 모델 로드
@@ -13,7 +14,8 @@ model = YOLO('yolov10n.pt', verbose=False)
 video_folder = '/data/FindSuspect/backend/src/main/frontend/public/video'
 
 # 저장할 디렉토리 생성
-output_folder = 'video_output'
+output_folder = sys.argv[0]
+
 if os.path.exists(output_folder):
     # 폴더 내의 모든 파일 삭제
     for filename in os.listdir(output_folder):
