@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MyExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     public String BadRequest(BadRequestException e) {
         return e.getMessage();

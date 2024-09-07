@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.coyote.Response;
 import org.example.dto.ResponseDto;
 import org.example.dto.SaveDataDto;
+import org.example.exception.BadRequestException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 import java.io.OutputStream;
 
 @Service
+@Validated
 public class UploadService {
     private final String UPLOAD_DIR_VIDEO = "/data/FindSuspect/backend/src/main/frontend/public/video/";
     private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image/";
@@ -141,24 +144,7 @@ public class UploadService {
 
     }
 
-    public void uploadImage(MultipartFile imageFile) throws IOException {
-        try {
-            saveFile(UPLOAD_DIR_IMAGE, imageFile);
-        } catch (IOException e) {
-            throw new IOException("이미지 저장 실패");
-        }
-        imagePython();
-
-    }
-    private void CheckFolder(String fileName){
-        String path = "/data/FindSuspect/backend/src/main/frontend/public/video/"+fileName;
-        File folder = new File(path);
-        if (folder.exists() && folder.isDirectory()) {
-            // 폴더가 존재하면 예외 발생
-            throw new Exception("같은 이름의 영상이 이미 존재합니다");
-
-    }
-    private void saveFile(String dir, MultipartFile file) throws IOException {
+    private void saveFile(String dir, MultipartFile file) {
         String fileName = file.getOriginalFilename();
         CheckFolder(fileName);
         Path targetPath = Paths.get(dir + fileName);
@@ -171,35 +157,51 @@ public class UploadService {
         }
     }
 
-    public void uploadVideo(MultipartFile videoFile) throws IOException{
-        try{
-            saveFile(UPLOAD_DIR_VIDEO, videoFile);
-        }catch(IOException e){
-            throw new IOException("저장 실패");
+    public void uploadImage(MultipartFile imageFile) {
+        saveFile(UPLOAD_DIR_IMAGE, imageFile);
+        imagePython();
+
+    }
+
+    private void CheckFolder(String fileName){
+        String path = "/data/FindSuspect/backend/src/main/frontend/public/video/"+fileName;
+        File folder = new File(path);
+        if (folder.exists() && folder.isDirectory()) {
+            throw new BadRequestException("같은 이름의 영상이 이미 존재합니다");
         }
+    }
+
+
+    public void uploadVideo(MultipartFile videoFile){
+        saveFile(UPLOAD_DIR_VIDEO, videoFile);
         videoPython();
     }
 
-    public String getImagePath() throws IOException {
+    private String getPath(String dir) {
+        Path viedoDir = Paths.get(dir);
+        Path viedoPath = null;
+        try {
+            viedoPath = Files.list(viedoDir)
+                    .filter(Files::isRegularFile)
+                    .findFirst().orElseThrow(()->new BadRequestException("파일 없음"));
+        } catch (IOException e) {
+            throw new BadRequestException("파일 없음");
+        }
+
+        String returnPath = viedoPath.toString();
+        return returnPath;
+    }
+
+    public String getImagePath() {
         String returnPath = getPath(UPLOAD_DIR_IMAGE);
         int index = returnPath.indexOf("/image");
         return returnPath.substring(index);
     }
 
-    public String getVideoPath() throws IOException {
+    public String getVideoPath() {
         String returnPath = getPath(UPLOAD_DIR_VIDEO);
         int index = returnPath.indexOf("/video");
         return returnPath.substring(index);
-    }
-
-    private String getPath(String dir) throws IOException {
-        Path viedoDir = Paths.get(dir);
-        Path viedoPath = Files.list(viedoDir)
-                .filter(Files::isRegularFile)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No image file found"));
-        String returnPath = viedoPath.toString();
-        return returnPath;
     }
 
     public List<ResponseDto> getResult(){

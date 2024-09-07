@@ -10,12 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 public class UploadController {
     @Autowired
     UploadService uploadService;
@@ -27,44 +28,27 @@ public class UploadController {
 
     @PostMapping("/api/upload/image")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile imageFile) {
-        try {
-            uploadService.uploadImage(imageFile);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 저장할 수 없음");
-        }
+        uploadService.uploadImage(imageFile);
 
         return ResponseEntity.ok("정상 업로드");
     }
 
     @PostMapping("/api/upload/video")
     public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile videoFile) {
-        try {
-            uploadService.uploadVideo(videoFile);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 저장할 수 없음");
-        }
+        uploadService.uploadVideo(videoFile);
         return ResponseEntity.ok("정상 업로드");
     }
 
     @GetMapping("/api/get/image")
     public ResponseEntity<String> getImagePath() {
-        String imagePath;
-        try {
-            imagePath = uploadService.getImagePath();
-        } catch (Exception e) {
-            return new ResponseEntity<>("Failed to get image path", HttpStatus.NOT_FOUND);
-        }
+        String imagePath = uploadService.getImagePath();
+
         return new ResponseEntity<>(imagePath, HttpStatus.OK);
     }
 
     @GetMapping("/api/get/video")
     public ResponseEntity<String> getVideoPath() {
-        String videoPath;
-        try {
-            videoPath = uploadService.getVideoPath();
-        } catch (Exception e) {
-            return new ResponseEntity<>("Failed to get image path", HttpStatus.NOT_FOUND);
-        }
+        String videoPath= uploadService.getVideoPath();
         return new ResponseEntity<>(videoPath, HttpStatus.OK);
     }
 
