@@ -33,41 +33,6 @@ public class UploadService {
 
     private final int FPS = 30;
 
-    private boolean checkCuda() {
-        try {
-            // CUDA 확인을 위한 Python 스크립트 실행 명령어
-            String command = "python algorithm/cuda.py";
-
-            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-            processBuilder.redirectErrorStream(true);
-            processBuilder.directory(new java.io.File(".")); // 프로젝트 루트 디렉토리 설정
-
-            Process process = processBuilder.start();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            boolean cudaAvailable = false;
-            
-            while ((line = reader.readLine()) != null) {
-                // System.out.println(line);
-                if (line.trim().equalsIgnoreCase("True")) {
-                    cudaAvailable = true;
-                }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                System.err.println("CUDA 확인 중 오류 발생");
-                return false;
-            }
-
-            return cudaAvailable;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     private void videoPython(){
         try {
             // Python 스크립트 실행 명령어
@@ -85,7 +50,7 @@ public class UploadService {
             int exitCode = process.waitFor();
             if(exitCode != 0) throw new Exception("영상 feature 오류");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new BadRequestException("영상 저장 실패");
         }
 
     }
@@ -119,7 +84,7 @@ public class UploadService {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new BadRequestException("json 읽기 실패");
             }
 
             //responseDto로 변환 후 result에 저장
@@ -138,8 +103,7 @@ public class UploadService {
                 return new ResponseDto(saveDataDto.imageName(),strTime,saveDataDto.accuracy());
             }).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
-//            output.append("Error: ").append(e.getMessage());
+            throw new BadRequestException("이미지 처리 실패");
         }
 
     }
@@ -153,7 +117,7 @@ public class UploadService {
         try (OutputStream os = Files.newOutputStream(targetPath)) {
             os.write(file.getBytes());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException("파일 저장 실패");
         }
     }
 
@@ -171,6 +135,38 @@ public class UploadService {
         }
     }
 
+    private boolean checkCuda() {
+        try {
+            // CUDA 확인을 위한 Python 스크립트 실행 명령어
+            String command = "python algorithm/cuda.py";
+
+            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+            processBuilder.redirectErrorStream(true);
+            processBuilder.directory(new java.io.File(".")); // 프로젝트 루트 디렉토리 설정
+
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            boolean cudaAvailable = false;
+
+            while ((line = reader.readLine()) != null) {
+                // System.out.println(line);
+                if (line.trim().equalsIgnoreCase("True")) {
+                    cudaAvailable = true;
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                throw new BadRequestException("CUDA 확인 중 오류 발생");
+            }
+
+            return cudaAvailable;
+        } catch (Exception e) {
+            throw new BadRequestException("python 실행 실패");
+        }
+    }
 
     public void uploadVideo(MultipartFile videoFile){
         saveFile(UPLOAD_DIR_VIDEO, videoFile);
@@ -208,4 +204,14 @@ public class UploadService {
         return this.result;
     }
 
+    public void deleteVideo(String name) {
+        List<Path> path = new ArrayList<>();
+        path.add(Paths.get("/data/FindSuspect/backend/src/main/frontend/video/"+name));
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
