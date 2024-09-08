@@ -41,7 +41,7 @@ for image_file in os.listdir(image_folder):
         for r in results:
             boxes = r.boxes
             for box in boxes:
-                if box.cls == 0 and is_full_body(box, image_height, image_width):  # 0은 'person' 클래스
+                if box.cls == 0 :  # 0은 'person' 클래스
                     person_count += 1
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     cropped_human = image[y1:y2, x1:x2]

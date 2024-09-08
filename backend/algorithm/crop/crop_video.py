@@ -11,10 +11,10 @@ logging.getLogger("ultralytics").setLevel(logging.ERROR)
 model = YOLO('yolov10n.pt', verbose=False)
 
 # 비디오 파일이 있는 폴더 경로
-video_folder = '/data/FindSuspect/backend/src/main/frontend/public/video'
+video_folder = '/data/FindSuspect/backend/src/main/frontend/public/video/' + sys.argv[1]
 
 # 저장할 디렉토리 생성
-output_folder = sys.argv[0]
+output_folder = sys.argv[1]
 
 if os.path.exists(output_folder):
     # 폴더 내의 모든 파일 삭제
@@ -57,7 +57,7 @@ for video_file in os.listdir(video_folder):
                 for r in results:
                     boxes = r.boxes
                     for box in boxes :
-                        if box.cls == 0 and is_full_body(box, image_height, image_width):  # 0은 'person' 클래스
+                        if box.cls == 0 :  # 0은 'person' 클래스
                             person_count += 1
                             x1, y1, x2, y2 = map(int, box.xyxy[0])
                             cropped_human = frame[y1:y2, x1:x2]

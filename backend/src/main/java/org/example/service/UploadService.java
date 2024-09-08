@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +22,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.io.OutputStream;
 
 @Service
 @Validated
@@ -33,11 +33,11 @@ public class UploadService {
 
     private final int FPS = 30;
 
-    private void videoPython(){
+    private void videoPython(String fileName){
         try {
             // Python 스크립트 실행 명령어
             if (!checkCuda()) throw new Exception("cuda사용 안됨");
-            String command = "python algorithm/video_upload.py"; // Windows 사용 시 "python script.py"로 변경
+            String command = "python algorithm/video_upload.py " + fileName; // Windows 사용 시 "python script.py"로 변경
 
             // 프로세스 빌더 설정
             ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
@@ -108,10 +108,63 @@ public class UploadService {
 
     }
 
-    private void saveFile(String dir, MultipartFile file) {
+    private void saveImage(String dir, MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        CheckFolder(fileName);
-        Path targetPath = Paths.get(dir + fileName);
+        Path targetPath = Paths.get(dir+fileName);
+
+        // 해당 path 에 파일의 스트림 데이터를 저장
+        try (OutputStream os = Files.newOutputStream(targetPath)) {
+            os.write(file.getBytes());
+        } catch (IOException e) {
+            throw new BadRequestException("파일 저장 실패");
+        }
+    }
+
+    private void deleteFolder(File folder) {
+        // 폴더 안의 모든 파일과 하위 디렉토리 삭제
+        File[] files = folder.listFiles();
+        if (files != null) {  // 파일이 있을 때만 실행
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // 하위 폴더가 있으면 재귀적으로 삭제
+                    deleteFolder(file);
+                } else {
+                    // 파일 삭제
+                    if (!file.delete()) {
+                        throw new RuntimeException("파일 삭제 실패: " + file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        // 폴더 자체 삭제
+        if (!folder.delete()) {
+            throw new RuntimeException("폴더 삭제 실패: " + folder.getAbsolutePath());
+        }
+    }
+    private void saveVideo(String dir, MultipartFile file) {
+        // 원본 파일 이름
+        String fileName = file.getOriginalFilename();
+        
+        // 1. sample.mp4라는 폴더 경로 설정
+        Path folderPath = Paths.get(dir + "/" + fileName);
+        File folder = new File(folderPath.toString());
+        
+        // 폴더가 존재하면 삭제
+        if (folder.exists()) {
+            deleteFolder(folder);  // 재귀적으로 폴더 삭제
+        }
+        
+        // 폴더가 존재하지 않으면 생성
+        if (!folder.exists()) {
+            boolean isCreated = folder.mkdirs();
+            if (!isCreated) {
+                throw new BadRequestException("폴더 생성에 실패했습니다: " + folderPath);
+            }
+        }
+
+        // 2. sample.mp4 폴더 안에 sample.mp4 파일 경로 설정
+        Path targetPath = Paths.get(folderPath.toString() + "/" + fileName);
+
 
         // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(targetPath)) {
@@ -122,18 +175,11 @@ public class UploadService {
     }
 
     public void uploadImage(MultipartFile imageFile) {
-        saveFile(UPLOAD_DIR_IMAGE, imageFile);
+        saveImage(UPLOAD_DIR_IMAGE, imageFile);
         imagePython();
 
     }
 
-    private void CheckFolder(String fileName){
-        String path = "/data/FindSuspect/backend/src/main/frontend/public/video/"+fileName;
-        File folder = new File(path);
-        if (folder.exists() && folder.isDirectory()) {
-            throw new BadRequestException("같은 이름의 영상이 이미 존재합니다");
-        }
-    }
 
     private boolean checkCuda() {
         try {
@@ -169,8 +215,8 @@ public class UploadService {
     }
 
     public void uploadVideo(MultipartFile videoFile){
-        saveFile(UPLOAD_DIR_VIDEO, videoFile);
-        videoPython();
+        saveVideo(UPLOAD_DIR_VIDEO, videoFile);
+        videoPython(videoFile.getOriginalFilename());
     }
 
     private String getPath(String dir) {
@@ -205,13 +251,25 @@ public class UploadService {
     }
 
     public void deleteVideo(String name) {
-        List<Path> path = new ArrayList<>();
-        path.add(Paths.get("/data/FindSuspect/backend/src/main/frontend/video/"+name));
-
+        Path path1 = (Paths.get("/data/FindSuspect/backend/src/main/frontend/video/"+name));
+        Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VRFPAR++/features/"+name+".json"));
         try {
+            // path1 폴더와 그 안의 파일/폴더 삭제
+            File folder = path1.toFile();
+            if (folder.exists() && folder.isDirectory()) {
+                deleteFolder(folder);
+            } else {
+                throw new BadRequestException("폴더가 존재하지 않거나 디렉토리가 아닙니다: " + path1.toString());
+            }
 
+            // path2에 해당하는 파일 삭제
+            if (Files.exists(path2)) {
+                Files.delete(path2);
+            } else {
+                throw new BadRequestException("파일이 존재하지 않습니다: " + path2.toString());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new BadRequestException("파일 삭제 실패")
         }
     }
 }

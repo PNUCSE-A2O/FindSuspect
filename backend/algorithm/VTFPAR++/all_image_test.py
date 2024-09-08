@@ -96,7 +96,7 @@ def main():
     checkpoint=torch.load('VTF-Pretrain.pth')
     model.load_state_dict(checkpoint['model_state_dict'],strict=False)
     start_epoch=1
-    files = os.listdir(sys.argv[0])
+    files = os.listdir('person_snapshots')
 
     trans = transforms.Compose([transforms.ToTensor(),
                                 transforms.Resize(size=[224,224]),
@@ -104,9 +104,10 @@ def main():
     
     results_dict = {}  # 결과를 저장할 딕셔너리
 
+    
     for file in files:
         imgs=[]
-        i=os.path.join('person_snapshots',file)
+        i=os.path.join('person_snapshots', file)
         pil=Image.open(i)
         pil=trans(pil)
         imgs.append(pil)
@@ -123,7 +124,7 @@ def main():
         
         results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
         
-    file_path = sys.argv[0]+".json"
+    file_path = "features/"+sys.argv[1]+".json"
 
     # 파일이 존재하는지 확인하고, 있으면 삭제
     if os.path.exists(file_path):
@@ -131,6 +132,9 @@ def main():
         os.remove(file_path)
     else:
         print(f"'{file_path}' 파일이 존재하지 않습니다. 새로 생성합니다.")
+
+    if not results_dict:
+        exit(-1)
 
     # 파일 생성 및 JSON 형식으로 저장
     with open(file_path, 'w') as f:
