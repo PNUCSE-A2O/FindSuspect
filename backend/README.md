@@ -17,39 +17,48 @@ post /api/upload/image
 imageFile에 이미지 넣고 요청
 
 저장경로 src/main/frontend/server/uploads/image
-<br>
+
 기존 업로드에서 영상 하나만 넣고 전송하면됨 
-<br>
-## 경로 요청
-
-### 사진 경로 요청
-
-get /api/get/image
-
-### 영상 경로 요청
-
-get /api/get/video
-
-uploads로부터 시작하는 파일경로 return
-ex)uploads/video/sample.mp4
-<br>
-react경로 수정 필요하면 말해주시면 됩니다.
 
 
-## 결과
+
+### 결과
 
 get /api/result
-[
-    {
-        "imageName": "image1.png",
-        "time": "00:01",
-        "accuracy": 85
+{
+    "sample.mp4_frame1140_person1.jpg": {
+        "video_name": "sample.mp4",
+        "similarity": 95.7985952765769,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.6205,
+            0.9817,
+            0.0091,
+            0.9403,
+            0.4634
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ],
+        "time": "0:38"
     },
-    {
-        "imageName": "image2.png",
-        "time": "00:02",
-        "accuracy": 90
-    }
-]
+    ...
+} 형식으로 나감
+
+### 영상 삭제
+
+delete /api/video
+
+name으로 지우고 싶은 영상이름 넣어서 요청
 
 
