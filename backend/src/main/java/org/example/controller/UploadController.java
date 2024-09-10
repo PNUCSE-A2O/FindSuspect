@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.dto.ResponseDto;
-import org.example.dto.ResponseDto;
+import org.example.dto.SaveDataDto;
+import java.util.*;
 import org.example.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,9 +50,9 @@ public class UploadController {
     }
 
     @GetMapping("/api/result")
-    public ResponseEntity<List<ResponseDto>> getResult(){
-        List<ResponseDto> responseDtoList = uploadService.getResult();
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    public ResponseEntity<Map<String, SaveDataDto>> getResult(){
+        Map<String, SaveDataDto> data = uploadService.getResult();
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/video")

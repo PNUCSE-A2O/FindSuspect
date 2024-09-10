@@ -8,6 +8,7 @@ import org.example.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +30,7 @@ public class UploadService {
     private final String UPLOAD_DIR_VIDEO = "/data/FindSuspect/backend/src/main/frontend/public/video/";
     private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image/";
     private ObjectMapper objectMapper = new ObjectMapper();
-    private List<ResponseDto> result = new ArrayList<>();
+    private Map<String, SaveDataDto> jsonData = new HashMap<>();
 
     private final int FPS = 30;
 
@@ -72,37 +73,42 @@ public class UploadService {
             if(exitCode != 0) throw new Exception("이미지 feature 오류");
 
             //result.json읽어 파싱 후 List로 local에 저장
-            List<SaveDataDto> saveDataDtoList = new ArrayList<>();;
-            try {
-                // JSON 파일을 읽어 Map으로 변환합니다.
-                Map<String, Double> map = objectMapper.readValue(new File("/data/FindSuspect/backend/src/main/resources/data/result.json"), Map.class);
+            String dirPath = "/data/FindSuspect/backend/src/main/resources/data";
+            File dir = new File(dirPath);
+            File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 
-                // SaveDataDto 리스트로 변환합니다.
+            jsonData = new HashMap<>();
+                   
+            assert jsonFiles != null;
+            for (File jsonFile : jsonFiles) {
+                // JSON 파일을 Map<String, Object>로 파싱
+                Map<String, Object> fileData = objectMapper.readValue(jsonFile, new TypeReference<Map<String, Object>>() {});
 
-                for (Map.Entry<String, Double> entry : map.entrySet()) {
-                    saveDataDtoList.add(new SaveDataDto(entry.getKey(), (int) (entry.getValue()*100)));
+                // 파싱된 데이터를 SaveDataDto 객체로 변환
+                for (Map.Entry<String, Object> entry : fileData.entrySet()) {
+                    SaveDataDto dto = objectMapper.convertValue(entry.getValue(), SaveDataDto.class);
+                    jsonData.put(entry.getKey(), dto);
                 }
-
-            } catch (IOException e) {
-                throw new BadRequestException("json 읽기 실패");
             }
 
-            //responseDto로 변환 후 result에 저장
-            result = saveDataDtoList.stream().map(saveDataDto -> {
-                Pattern pattern = Pattern.compile("frame(\\d+)");
-                Matcher matcher = pattern.matcher(saveDataDto.imageName());
-                int frameNumber;
+            // frame 번호를 추출하여 time 설정
+            Pattern pattern = Pattern.compile("frame(\\d+)");
+            for (Map.Entry<String, SaveDataDto> entry : jsonData.entrySet()) {
+                String key = entry.getKey();
+                SaveDataDto dto = entry.getValue();
+
+                Matcher matcher = pattern.matcher(key);
                 if (matcher.find()) {
-                    frameNumber = Integer.parseInt(matcher.group(1));
-                    // frameNumber 사용 코드
-                } else {
-                    throw new IllegalArgumentException("Invalid image name format: " + saveDataDto.imageName());
+                    int frameNumber = Integer.parseInt(matcher.group(1));
+                    int minute = frameNumber / (60 * FPS);
+                    int second = (frameNumber / FPS) % 60;
+                    String strTime = String.format("%d:%02d", minute, second);
+                    dto.setTime(strTime);
                 }
-                int minute = frameNumber/60/FPS, second = frameNumber/FPS%60;
-                String strTime = minute+":"+second;
-                return new ResponseDto(saveDataDto.imageName(),strTime,saveDataDto.accuracy());
-            }).collect(Collectors.toList());
+            }
+            
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new BadRequestException("이미지 처리 실패");
         }
 
@@ -113,7 +119,7 @@ public class UploadService {
 
         File directory = new File(dir);
         File[] files = directory.listFiles();
-        if(files.length>0){
+        if (files != null) {
             for (File f : files) {
                 if (f.isFile()) {
                     if (!f.delete()) {
@@ -259,29 +265,32 @@ public class UploadService {
         return returnPath.substring(index);
     }
 
-    public List<ResponseDto> getResult(){
-        return this.result;
+    public Map<String, SaveDataDto> getResult(){
+        return this.jsonData;
     }
 
     public void deleteVideo(String name) {
-        Path path1 = (Paths.get("/data/FindSuspect/backend/src/main/frontend/video/"+name));
-        Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VRFPAR++/features/"+name+".json"));
+        Path path1 = (Paths.get("/data/FindSuspect/backend/src/main/frontend/public/video/"+name));
+        Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VTFPAR++/features/"+name+".json"));
+        //System.out.println(path2.toString());
+
         try {
-            // path1 폴더와 그 안의 파일/폴더 삭제
+            //path1 폴더와 그 안의 파일/폴더 삭제
             File folder = path1.toFile();
             if (folder.exists() && folder.isDirectory()) {
                 deleteFolder(folder);
             } else {
-                throw new BadRequestException("폴더가 존재하지 않거나 디렉토리가 아닙니다: " + path1.toString());
+                throw new BadRequestException("not exist folder: " + path1.toString());
             }
 
             // path2에 해당하는 파일 삭제
             if (Files.exists(path2)) {
                 Files.delete(path2);
             } else {
-                throw new BadRequestException("파일이 존재하지 않습니다: " + path2.toString());
+                throw new BadRequestException("not exist file: " + path2.toString());
             }
         } catch (Exception e) {
+            //System.out.println(e.getMessage());
             throw new BadRequestException("파일 삭제 실패");
         }
     }

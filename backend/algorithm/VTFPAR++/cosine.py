@@ -49,8 +49,10 @@ def get_similarity(feature, new_attr_words):
                 top_5_input_values = [item[1] for item in top_5_features]  # 상위 5개의 원본 feature 값
                 top_5_file_values = [item[2] for item in top_5_features]  # 상위 5개의 파일 feature 값
                 top_5_names = [item[3] for item in top_5_features]  # 상위 5개의 속성 이름
-
+                video_name_idx = key.find('mp4') + len('mp4')
+                video_name = key[:video_name_idx]
                 detailed_result[key] = {
+                    "video_name": video_name,
                     "similarity": overall_similarity * 100,  # 백분율로 변환
                     "original_top5": top_5_input_values,
                     "file_top5": top_5_file_values,
@@ -58,6 +60,6 @@ def get_similarity(feature, new_attr_words):
                 }
 
             # 결과를 key 이름으로 result 폴더에 저장
-            output_file_path = os.path.join(output_folder, f"{key}.json")
+            output_file_path = os.path.join(output_folder, f"/data/FindSuspect/backend/src/main/resources/data/{file_name}")
             with open(output_file_path, 'w') as out_file:
                 json.dump(detailed_result, out_file, indent=4)

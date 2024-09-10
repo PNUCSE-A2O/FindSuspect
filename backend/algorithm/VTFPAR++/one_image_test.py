@@ -130,7 +130,7 @@ def main():
     result=[round(value, 4) for value in result]
     
     top_5 = cosine.get_similarity(result, new_attr_words)
-    save_json("/data/FindSuspect/backend/src/main/resources/data/result.json", top_5)
+    #save_json("/data/FindSuspect/backend/src/main/resources/data/result.json", top_5)
 
 
     
