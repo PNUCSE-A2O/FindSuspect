@@ -269,7 +269,7 @@ public class UploadService {
                 throw new BadRequestException("파일이 존재하지 않습니다: " + path2.toString());
             }
         } catch (Exception e) {
-            throw new BadRequestException("파일 삭제 실패")
+            throw new BadRequestException("파일 삭제 실패");
         }
     }
 }

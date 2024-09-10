@@ -37,6 +37,10 @@ def move_files(src_dir, dst_dir):
         shutil.move(s, d)
 
 
+def delete_folder(src_dir):
+    if os.path.exists(src_dir):
+        shutil.rmtree(src_dir)
+
 # 현재 디렉토리 경로
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -53,3 +57,4 @@ run_python_file(a_path, sys.argv[1])
 move_files(src_folder, dst_folder)
 run_python_file(b_path, sys.argv[1])
 #move_files(dst_folder, front_folder)
+delete_folder(src_folder)

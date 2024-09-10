@@ -29,9 +29,9 @@ else:
     # 폴더가 없으면 새로 생성
     os.makedirs(output_folder)
 
-# 비디오 폴더 내의 모든 파일에 대해 처리
+# 이미지 폴더 내의 모든 파일에 대해 처리
 for image_file in os.listdir(image_folder):
-    if image_file.endswith(('.jpg', '.jpeg', '.png')):  # 비디오 파일 확장자 추가 가능
+    if image_file.endswith(('.jpg', '.jpeg', '.png')):  # 이미지 파일 확장자 추가 가능
         image_path = os.path.join(image_folder, image_file)
         image = cv2.imread(image_path)
 

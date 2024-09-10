@@ -2,7 +2,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import json
 
-def get_similarity(feature):
+def get_similarity(feature, new_attr_words):
     file_name = "features.json"
     result = {}
     with open(file_name, 'r') as f:

@@ -56,14 +56,21 @@ for video_file in os.listdir(video_folder):
                 person_count = 0
                 for r in results:
                     boxes = r.boxes
-                    for box in boxes :
-                        if box.cls == 0 :  # 0은 'person' 클래스
+                    for box in boxes:
+                        if box.cls == 0:  # 0은 'person' 클래스
                             person_count += 1
                             x1, y1, x2, y2 = map(int, box.xyxy[0])
                             cropped_human = frame[y1:y2, x1:x2]
-                            
-                            # 크롭된 이미지 저장
-                            output_filename = f'{output_folder}/{os.path.splitext(video_file)[0]}_frame{frame_count}_person{person_count}.jpg'
-                            cv2.imwrite(output_filename, cropped_human)
 
+                            # 크롭된 이미지 저장
+                            output_filename_cropped = f'{output_folder}/{sys.argv[1]}_frame{frame_count}_person{person_count}.jpg'
+                            cv2.imwrite(output_filename_cropped, cropped_human)
+                            
+                            # 각 사람마다 별도로 사각형 그리기
+                            frame_with_rectangle = frame.copy()  # 프레임 복사
+                            cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 0, 255), 2)  # 빨간 사각형(색상: BGR, 두께: 2)
+                            
+                            # 사각형이 그려진 이미지 저장
+                            output_filename_rect = f'/data/FindSuspect/backend/src/main/frontend/public/video/{sys.argv[1]}/{sys.argv[1]}_frame{frame_count}_person{person_count}.jpg'
+                            cv2.imwrite(output_filename_rect, frame_with_rectangle)
         video.release()
