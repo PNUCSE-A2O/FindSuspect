@@ -46,7 +46,13 @@ for image_file in os.listdir(image_folder):
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     cropped_human = image[y1:y2, x1:x2]
                     
+                    frame_with_rectangle = image.copy()  # 이미지 복사
+                    cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 0, 255), 2)  # 빨간 사각형(색상: BGR, 두께: 2)
+                    
                     # 크롭된 이미지 저장
                     output_filename = f'{os.path.splitext(image_file)[0]}_person{person_count}.jpg'
                     output_path = os.path.join(output_folder, output_filename)
                     cv2.imwrite(output_path, cropped_human)
+
+                    save_filename = f'/data/FindSuspect/backend/src/main/frontend/public/image/{image_file}'
+                    cv2.imwrite(save_filename, frame_with_rectangle)

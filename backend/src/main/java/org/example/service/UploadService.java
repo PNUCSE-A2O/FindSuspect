@@ -110,6 +110,19 @@ public class UploadService {
 
     private void saveImage(String dir, MultipartFile file) {
         String fileName = file.getOriginalFilename();
+
+        File directory = new File(dir);
+        File[] files = directory.listFiles();
+        if(files.length>0){
+            for (File f : files) {
+                if (f.isFile()) {
+                    if (!f.delete()) {
+                        throw new BadRequestException("파일 삭제 실패");
+                    }
+                }
+            }
+        }
+
         Path targetPath = Paths.get(dir+fileName);
 
         // 해당 path 에 파일의 스트림 데이터를 저장
@@ -141,6 +154,7 @@ public class UploadService {
             throw new RuntimeException("폴더 삭제 실패: " + folder.getAbsolutePath());
         }
     }
+
     private void saveVideo(String dir, MultipartFile file) {
         // 원본 파일 이름
         String fileName = file.getOriginalFilename();
@@ -179,7 +193,6 @@ public class UploadService {
         imagePython();
 
     }
-
 
     private boolean checkCuda() {
         try {
@@ -220,17 +233,17 @@ public class UploadService {
     }
 
     private String getPath(String dir) {
-        Path viedoDir = Paths.get(dir);
-        Path viedoPath = null;
+        Path Dir = Paths.get(dir);
+        Path path = null;
         try {
-            viedoPath = Files.list(viedoDir)
+            path = Files.list(Dir)
                     .filter(Files::isRegularFile)
                     .findFirst().orElseThrow(()->new BadRequestException("파일 없음"));
         } catch (IOException e) {
             throw new BadRequestException("파일 없음");
         }
 
-        String returnPath = viedoPath.toString();
+        String returnPath = path.toString();
         return returnPath;
     }
 
