@@ -106,6 +106,9 @@ def main():
     start_epoch=1
     files = os.listdir('suspect_snapshots')
 
+    image_files = [f for f in files if f.endswith(('.jpg', '.jpeg', '.png'))]
+    image_name = image_files[0]
+
     trans = transforms.Compose([transforms.ToTensor(),
                                 transforms.Resize(size=[224,224]),
                                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -129,7 +132,7 @@ def main():
     new_attr_words = [value for index, value in enumerate(attr_words) if index < 9 or index > 15]
     result=[round(value, 4) for value in result]
     
-    top_5 = cosine.get_similarity(result, new_attr_words)
+    top_5 = cosine.get_similarity(result, new_attr_words, image_name)
     #save_json("/data/FindSuspect/backend/src/main/resources/data/result.json", top_5)
 
 

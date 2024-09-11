@@ -3,10 +3,10 @@ import json
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-def get_similarity(feature, new_attr_words):
+def get_similarity(feature, new_attr_words, image_name):
     # features 폴더에서 파일 목록을 가져오기
     input_folder = "features"
-    output_folder = "result"
+    output_folder = f"result/{image_name}"
     
     # 출력 폴더가 없으면 생성
     if not os.path.exists(output_folder):
@@ -59,7 +59,11 @@ def get_similarity(feature, new_attr_words):
                     "attr_words": top_5_names
                 }
 
+            output_path = f"/data/FindSuspect/backend/src/main/resources/data/{image_name}"
+            if not os.path.exists(output_path):
+                os.makedirs(output_path)
+
             # 결과를 key 이름으로 result 폴더에 저장
-            output_file_path = os.path.join(output_folder, f"/data/FindSuspect/backend/src/main/resources/data/{file_name}")
+            output_file_path = os.path.join(output_folder, f"/data/FindSuspect/backend/src/main/resources/data/{image_name}/{file_name}")
             with open(output_file_path, 'w') as out_file:
                 json.dump(detailed_result, out_file, indent=4)
