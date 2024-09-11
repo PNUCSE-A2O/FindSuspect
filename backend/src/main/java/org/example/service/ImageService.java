@@ -11,7 +11,8 @@ import org.example.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +35,7 @@ public class ImageService {
     HistoryRepository historyRepository;
     private Util util = new Util();
     private final int FPS = 30;
+    private String finalImage;
 
     private void saveImage(String dir, MultipartFile file) {
         String fileName = file.getOriginalFilename();
@@ -70,23 +73,30 @@ public class ImageService {
 
         int exitCode = util.newProcess(command);
         if(exitCode != 0) throw new BadRequestException("image feature error");
-
+        finalImage = fileName;
         readResultJson(fileName);
         saveHistory(fileName);
     }
 
     private void saveHistory(String fileName) {
         String originalFile = "image/"+ fileName +"/"+fileName;
-        String croppedFile = originalFile+ fileName +"_cropped.jpg";
-        String rectangleFile = originalFile+ fileName +"_rectangle.jpg";
-        String resultString =  result.toString();
-        History history = new History(originalFile,croppedFile,rectangleFile,resultString);
+        String croppedFile = originalFile +"_cropped.jpg";
+        String rectangleFile = originalFile +"_rectangle.jpg";
+        String resultString;
+        try{
+            resultString =  objectMapper.writeValueAsString(result);
+            //System.out.println(resultString);
+        }catch(JsonProcessingException e){
+            throw new BadRequestException("json write fail");
+        }
+        String unescapedResultString = StringEscapeUtils.unescapeJava(resultString);
+        History history = new History(originalFile,croppedFile,rectangleFile,unescapedResultString);
         historyRepository.save(history);
     }
 
     private void readResultJson(String fileName) {
         //result.json읽어 파싱 후 List로
-        String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName;
+        String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName+"_cropped.jpg";
         File dir = new File(dirPath);
         File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 
@@ -124,11 +134,18 @@ public class ImageService {
                 dto.setTime(strTime);
             }
         }
+        
     }
 
     public List<HistoryDTO> getHistory() {
         List<History> histories = historyRepository.findAll();
+        History his = histories.get(0);
+        
         List<HistoryDTO> result = histories.stream().map(History::toDTO).toList();
         return  result;
+    }
+    
+    public String getPath(){
+        return "public/image/" + finalImage;
     }
 }

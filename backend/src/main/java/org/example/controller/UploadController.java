@@ -37,6 +37,18 @@ public class UploadController {
         return ResponseEntity.ok("정상 업로드");
     }
 
+    @GetMapping("/api/get/image")
+    public ResponseEntity<String> getImagePath(){
+        String path = imageService.getPath();
+        return new ResponseEntity<>(path, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/get/video")
+    public ResponseEntity<List<String>> getVideoPath(){
+        List<String> videos = videoService.getPath();
+        return new ResponseEntity<>(videos, HttpStatus.OK);
+    }
+
     @GetMapping("/api/result")
     public ResponseEntity<Map<String, ResultDTO>> getResult(){
         Map<String, ResultDTO> data = imageService.getResult();

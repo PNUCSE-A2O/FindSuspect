@@ -6,5 +6,5 @@ public record HistoryDTO(
         String imageName,
         String imageCropped,
         String imageRectangle,
-        String jsonData) {
+        String result) {
 }

@@ -1,0 +1,127 @@
+{
+    "sample2.mp4_frame510_person4.jpg": {
+        "video_name": "sample2.mp4",
+        "similarity": 99.99999999999997,
+        "original_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "sample2.mp4_frame570_person5.jpg": {
+        "video_name": "sample2.mp4",
+        "similarity": 99.99999999999997,
+        "original_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "sample2.mp4_frame120_person3.jpg": {
+        "video_name": "sample2.mp4",
+        "similarity": 99.99999999999997,
+        "original_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "sample2.mp4_frame210_person2.jpg": {
+        "video_name": "sample2.mp4",
+        "similarity": 99.99999999999997,
+        "original_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "sample2.mp4_frame450_person6.jpg": {
+        "video_name": "sample2.mp4",
+        "similarity": 99.99999999999997,
+        "original_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    }
+}

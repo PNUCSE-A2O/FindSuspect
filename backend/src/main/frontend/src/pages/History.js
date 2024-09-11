@@ -10,7 +10,7 @@ const History = () => {
     const {loading, setLoading} = useLoadingState();
     const [resultData, setResultData] = useState([]);
     const navigate = useNavigate(); // navigate 함수 사용
-/*
+
     useEffect(() => {
         axios.get('/api/get/image')
             .then(response => {
@@ -24,7 +24,7 @@ const History = () => {
                 console.error('이미지 경로를 가져오는 중 오류 발생');
             })
     }, []);
-*/
+
     useEffect(() => {
         setLoading(true);
         axios.get('/api/result')

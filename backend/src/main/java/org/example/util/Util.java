@@ -78,4 +78,17 @@ public class Util {
         }
         return exitCode;
     }
+
+    public void init(){
+        File data = new File("/data/FindSuspect/backend/src/main/resources/data");
+        File image = new File("/data/FindSuspect/backend/src/main/frontend/public/image");
+
+        deleteFolder(data);
+        deleteFolder(image);
+
+        if (!data.mkdirs())
+            throw new BadRequestException("folder make fail");
+        if (!image.mkdirs())
+            throw new BadRequestException("folder make fail");
+    }
 }

@@ -1,8 +1,9 @@
 import subprocess
 import os
 import shutil
+import sys
 
-def run_python_file(file_path):
+def run_python_file(file_path, *args):
     # 파일이 있는 디렉토리로 이동
     file_dir = os.path.dirname(file_path)
     original_dir = os.getcwd()
@@ -10,7 +11,7 @@ def run_python_file(file_path):
 
     try:
         # Python 파일 실행
-        result = subprocess.run(['python', file_path], capture_output=True, text=True, check=True)
+        result = subprocess.run(['python', file_path]+list(args), capture_output=True, text=True, check=True)
         print(result.stdout)
     except subprocess.CalledProcessError as e:
         print(f"Error occurred: {e}")
@@ -44,6 +45,6 @@ src_folder = os.path.join(current_dir, 'crop', 'image_output')
 dst_folder = os.path.join(current_dir, 'VTFPAR++', 'suspect_snapshots')
 
 # Python 파일 실행
-run_python_file(a_path)
+run_python_file(a_path, sys.argv[1])
 move_files(src_folder, dst_folder)
-run_python_file(b_path)
+run_python_file(b_path, sys.argv[1])

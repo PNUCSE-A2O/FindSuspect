@@ -6,8 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.example.dto.HistoryDTO;
 import org.springframework.data.annotation.CreatedDate;
-
+import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class History {
@@ -18,6 +20,7 @@ public class History {
     String imageName;
     String imageCropped;
     String imageRectangle;
+    @Lob
     String jsonData;
     @CreatedDate
     LocalDateTime createdAt;
