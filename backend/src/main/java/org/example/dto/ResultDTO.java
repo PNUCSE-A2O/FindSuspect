@@ -2,7 +2,7 @@ package org.example.dto;
 
 import java.util.List;
 
-public class SaveDataDto {
+public class ResultDTO {
     
     public String video_name;
     public double similarity;

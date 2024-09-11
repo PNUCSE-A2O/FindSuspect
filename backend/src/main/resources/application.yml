@@ -1,0 +1,9 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  # 7 서버 실행시에 data.sql 실행
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
