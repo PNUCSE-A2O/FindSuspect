@@ -56,11 +56,11 @@ public class UploadService {
 
     }
 
-    private void imagePython(){
+    private void imagePython(String fileName){
         try {
             // Python 스크립트 실행 명령어
             if (!checkCuda()) throw new Exception("cuda사용 안됨");
-            String command = "python algorithm/image_upload.py"; // Windows 사용 시 "python script.py"로 변경
+            String command = "python algorithm/image_upload.py " + fileName; // Windows 사용 시 "python script.py"로 변경
 
             // 프로세스 빌더 설정
             ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
@@ -72,7 +72,7 @@ public class UploadService {
             int exitCode = process.waitFor();
             if(exitCode != 0) throw new Exception("이미지 feature 오류");
 
-            //result.json읽어 파싱 후 List로 local에 저장
+            //result.json읽어 파싱 후 List로
             String dirPath = "/data/FindSuspect/backend/src/main/resources/data";
             File dir = new File(dirPath);
             File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
@@ -117,19 +117,15 @@ public class UploadService {
     private void saveImage(String dir, MultipartFile file) {
         String fileName = file.getOriginalFilename();
 
-        File directory = new File(dir);
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                if (f.isFile()) {
-                    if (!f.delete()) {
-                        throw new BadRequestException("파일 삭제 실패");
-                    }
-                }
-            }
+        File dirPath = new File(dir+fileName);
+        if (dirPath.exists()) {
+            deleteFolder(dirPath);  // 폴더와 그 안의 모든 내용을 삭제
         }
 
-        Path targetPath = Paths.get(dir+fileName);
+        if (!dirPath.mkdirs()) 
+            throw new BadRequestException("파일 생성 실패");
+
+        Path targetPath = Paths.get(dirPath.toString(), fileName);
 
         // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(targetPath)) {
@@ -196,7 +192,7 @@ public class UploadService {
 
     public void uploadImage(MultipartFile imageFile) {
         saveImage(UPLOAD_DIR_IMAGE, imageFile);
-        imagePython();
+        imagePython(imageFile.getOriginalFilename());
 
     }
 

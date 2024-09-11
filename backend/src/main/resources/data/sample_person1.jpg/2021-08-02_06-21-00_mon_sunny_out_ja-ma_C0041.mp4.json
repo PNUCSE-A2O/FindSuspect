@@ -1,0 +1,127 @@
+{
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame480_person5.jpg": {
+        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+        "similarity": 76.03883112481581,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame450_person3.jpg": {
+        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+        "similarity": 76.03883112481581,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame360_person2.jpg": {
+        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+        "similarity": 76.03883112481581,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame450_person1.jpg": {
+        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+        "similarity": 76.03883112481581,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    },
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame330_person1.jpg": {
+        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+        "similarity": 76.03883112481581,
+        "original_top5": [
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
+        ],
+        "file_top5": [
+            0.7089,
+            0.8367,
+            0.744,
+            0.9329,
+            0.6406
+        ],
+        "attr_words": [
+            "top short",
+            "bottom short",
+            "shoulder bag",
+            "backpack",
+            "hat"
+        ]
+    }
+}

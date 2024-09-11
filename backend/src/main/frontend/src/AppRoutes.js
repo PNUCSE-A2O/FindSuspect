@@ -8,6 +8,8 @@ import Result from './pages/Result';
 import Landing from './pages/Landing';
 import Home from './pages/Home';
 import EnterPassword from './pages/EnterPassword';
+import History from './pages/History';
+import Detail from './pages/Detail'
 
 const AppRoutes = () => {
     //<Route path="/adminLoading" element={<AdminLoading />} />
@@ -20,6 +22,8 @@ const AppRoutes = () => {
             <Route path="/userUpload" element={<UserUpload />} />
             <Route path='/home' element={<Home/>} />
             <Route path='/password' element={<EnterPassword/>} />
+            <Route path='/History' element={<History/>} />
+            <Route path='/Detail' element={<Detail/>} />
         </Routes>
     );
 };
