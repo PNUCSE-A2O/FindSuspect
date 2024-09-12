@@ -16,11 +16,10 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/adminUpload" element={<AdminUpload />} />
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Home />} />
             <Route path="/result" element={<Result />} />
             <Route path="/userLoading" element={<UserLoading />} />
             <Route path="/userUpload" element={<UserUpload />} />
-            <Route path='/home' element={<Home/>} />
             <Route path='/password' element={<EnterPassword/>} />
             <Route path='/History' element={<History/>} />
             <Route path='/Detail' element={<Detail/>} />

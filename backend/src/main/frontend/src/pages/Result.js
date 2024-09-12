@@ -4,7 +4,7 @@ import { useLoadingState } from '../context/LoadingContext';
 //import HeaderAppBar from '../components/HeaderAppBar';
 import { Container, Typography, Box, Card, CardContent, Table, TableBody, TableCell, TableRow, TableContainer, Paper } from '@mui/material';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
-
+import ImageComponent from '../components/ResultImage';
 const Result = () => {
     const {loading, setLoading} = useLoadingState();
     const [latestImagePath, setLatestImagePath] = useState(null);
@@ -13,22 +13,26 @@ const Result = () => {
 
     useEffect(() => {
         axios.get('/api/get/image')
-        .then(response => {
-            console.log(response.data);
-            if(response){
-                const paths = response.data;
-                console.log(paths);
-                if(paths.length > 0){
-                    setLatestImagePath(paths);
-                } else {
-                    alert('이미지 경로를 가져오는데 실패했습니다.');
+            .then(response => {
+                console.log(response.data);
+                if (response && response.data) {
+                    let basePath = response.data;
+                    console.log(basePath)
+    
+                    const rectangleImagePath = basePath.replace(/^public\//, '') + '_rectangle.jpg';
+                    console.log(rectangleImagePath);
+
+                    setLatestImagePath(`/${rectangleImagePath}`); // 루트 경로에서 시작하는 이미지 경로 설정
                 }
-            }
-        })
-        .catch(error => {
-            console.error('이미지 경로를 가져오는 중 오류 발생');
-        })
+            })
+            .catch(error => {
+                console.error('이미지 경로를 가져오는 중 오류 발생', error);
+            });
     }, []);
+    
+    useEffect(() => {
+        console.log("Latest image path:", latestImagePath);
+    }, [latestImagePath]);
 
     useEffect(() => {
         axios.get('/api/get/video')
@@ -55,6 +59,7 @@ const Result = () => {
             .then(response => {
                 setLoading(false);
                 setResultData(response.data); 
+                console.log(response.data)
             })
             .catch(error => {
                 console.error('결과 데이터를 가져오는 중 오류 발생:', error);
@@ -70,17 +75,7 @@ const Result = () => {
                     <Box display="flex" flexDirection="row" justifyContent="center" mb={4} sx={{ gap: 3 }}>
                         <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                             <CardContent sx={{ width: '100%', height: '100%', padding: 0, marginTop: '25px' }}>
-                            {latestVideoPath ? (
-                                <video
-                                    controls
-                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                                >
-                                    <source src={`${latestVideoPath}`} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            ) : (
-                                <Typography>No video available</Typography>
-                            )}
+                            <ImageComponent resultData={resultData}></ImageComponent>
                             </CardContent>
                         </Card>
                         <Card sx={{ width: 300, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -103,16 +98,23 @@ const Result = () => {
                         <Table>
                             <TableBody>
                                 <TableRow>
+                                    <TableCell align="center">Video Name</TableCell>
                                     <TableCell align="center">Time</TableCell>
                                     <TableCell align="center">Accuracy</TableCell>
                                 </TableRow>
                                 {resultData.length > 0 ? (
-                                    resultData.map((result, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell align="center">{result.time}</TableCell>
-                                            <TableCell align="center">{result.accuracy}%</TableCell>
-                                        </TableRow>
-                                    ))
+                                    resultData.map((item, index) => {
+                                        const key = Object.keys(item)[0]; // 객체의 첫 번째 키를 가져옴
+                                        const result = item[key]; // 해당 키의 데이터를 가져옴
+                                        
+                                        return (
+                                            <TableRow key={index}>
+                                                <TableCell align="center">{result.video_name}</TableCell>
+                                                <TableCell align="center">{result.time}</TableCell> 
+                                                <TableCell align="center">{result.similarity.toFixed(2)}%</TableCell> {/* 유사도를 'accuracy'로 사용 */}
+                                            </TableRow>
+                                        );
+                                    })
                                 ) : (
                                     <TableRow>
                                         <TableCell align="center" colSpan={2}>No Results Available</TableCell>

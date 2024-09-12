@@ -1,14 +1,13 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.example.dto.HistoryDTO;
+import org.example.dto.ResultDTO;
 import org.springframework.data.annotation.CreatedDate;
-import jakarta.persistence.Lob;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -20,16 +19,31 @@ public class History {
     String imageName;
     String imageCropped;
     String imageRectangle;
-    @Lob
-    String jsonData;
     @CreatedDate
     LocalDateTime createdAt;
 
-    public History(String imageName, String imageCropped, String imageRectangle, String jsonData) {
+    String video_image;
+    String video_name;
+    double similarity;
+    @ElementCollection
+    List<Double> original_top5;
+    @ElementCollection
+    List<Double> file_top5;
+    @ElementCollection
+    List<String> attr_words;
+    String time;
+
+    public History(String imageName, String imageCropped, String imageRectangle, String video_image, ResultDTO result) {
         this.imageName = imageName;
         this.imageCropped = imageCropped;
         this.imageRectangle = imageRectangle;
-        this.jsonData = jsonData;
+        this.video_image = video_image;
+        this.video_name = result.getVideoName();
+        this.similarity = result.getSimilarity();
+        this.original_top5 = result.getOriginalTop5();
+        this.file_top5=result.getFileTop5();
+        this.attr_words = result.getAttrWords();
+        this.time = result.getTime();
     }
 
     public History() {
@@ -48,11 +62,10 @@ public class History {
         return imageRectangle;
     }
 
-    public String getJsonData() {
-        return jsonData;
-    }
 
     public HistoryDTO toDTO(){
-        return new HistoryDTO(this.imageName, this.imageCropped, this.imageRectangle, this.jsonData);
+        return new HistoryDTO(imageName, imageCropped, imageRectangle,
+                 video_image, video_name, similarity,
+                 original_top5, file_top5, attr_words, time);
     }
 }

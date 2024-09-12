@@ -19,7 +19,7 @@ const Detail = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1" gutterBottom><strong>Input Image:</strong></Typography>
+              <Typography variant="subtitle1" gutterBottom><strong>Input Crop:</strong></Typography>
               <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img src={data.imagePath || 'default-placeholder.png'} alt="Detected" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
               </Paper>
@@ -27,7 +27,7 @@ const Detail = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1" gutterBottom><strong>Found Image:</strong></Typography>
+              <Typography variant="subtitle1" gutterBottom><strong>Found Crop:</strong></Typography>
               <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img src={data.foundImagePath || 'default-placeholder.png'} alt="Result" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
               </Paper>

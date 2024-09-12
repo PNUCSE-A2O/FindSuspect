@@ -10,7 +10,7 @@ const Home = () => {
 
     const handleClick = () => {
         setLoading(true);
-        navigate('/');
+        navigate('userupload');
     };
 
     return (

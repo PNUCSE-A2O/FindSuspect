@@ -6,13 +6,15 @@ import org.example.util.Util;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -21,7 +23,6 @@ public class VideoService {
     private final String UPLOAD_DIR_VIDEO = "/data/FindSuspect/backend/src/main/frontend/public/video/";
     private ObjectMapper objectMapper = new ObjectMapper();
     private Util util = new Util();
-    
 
     private void saveVideo(String dir, MultipartFile file) {
         // 원본 파일 이름
@@ -102,7 +103,7 @@ public class VideoService {
     public List<String> getPath(){
         List<String> videos = new ArrayList<>();
         String folderPath = "/data/FindSuspect/backend/src/main/frontend/public/video";
-        
+
         // 경로의 폴더를 File 객체로 생성
         File directory = new File(folderPath);
 
@@ -115,8 +116,8 @@ public class VideoService {
                 for (File file : files) {
                     videos.add(file.getName());
                 }
-            } 
-        } 
+            }
+        }
         return videos;
     }
 

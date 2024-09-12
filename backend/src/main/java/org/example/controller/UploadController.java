@@ -50,8 +50,8 @@ public class UploadController {
     }
 
     @GetMapping("/api/result")
-    public ResponseEntity<Map<String, ResultDTO>> getResult(){
-        Map<String, ResultDTO> data = imageService.getResult();
+    public ResponseEntity<List<Map.Entry<String, ResultDTO>>> getResult(){
+        List<Map.Entry<String, ResultDTO>> data = imageService.getResult();
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
@@ -66,5 +66,10 @@ public class UploadController {
         List<HistoryDTO> result = imageService.getHistory();
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+    @PostMapping("/api/history")
+    public ResponseEntity<String> saveHistory(@RequestParam("image_name") String imageName){
+        imageService.saveHistory(imageName);
+        return new ResponseEntity<>("",HttpStatus.OK);
 
+    }
 }

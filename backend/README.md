@@ -24,40 +24,127 @@ imageFile에 이미지 넣고 요청
 
 delete /api/video
 
-name으로 지우고 싶은 영상이름 넣어서 요청
+video_name으로 지우고 싶은 영상이름 넣어서 요청
 
 ## 경로
 
 ### 이미지 경로
 
-![alt text](image-1.png)
+request get /api/get/image
+
+response image/sample.jpg/sample.jpg
 
 ### 영상 경로
 
-![alt text](image.png)
+request get /api/get/video
+
+response 
+```
+[
+    "sample2.mp4",
+    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
+    "KakaoTalk_Video_2024-09-05-15-01-49.mp4",
+    "sample.mp4"
+]
+```
 
 ## 결과
 
 get /api/result
 
 ```
-{
-    "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame330_person1.jpg": {
-        "video_name": "2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4",
-        "similarity": 99.99999999999997,
+[
+    {
+        "sample.mp4_frame60_person1.jpg": {
+            "video_name": "sample.mp4",
+            "similarity": 98.92123387745694,
+            "original_top5": [
+                0.9172,
+                0.5366,
+                0.0535,
+                0.653,
+                0.4283
+            ],
+            "file_top5": [
+                0.9234,
+                0.8794,
+                0.0627,
+                0.8977,
+                0.3649
+            ],
+            "attr_words": [
+                "top short",
+                "bottom short",
+                "shoulder bag",
+                "backpack",
+                "hat"
+            ],
+            "time": "0:02",
+            "videoName": "sample.mp4",
+            "originalTop5": [
+                0.9172,
+                0.5366,
+                0.0535,
+                0.653,
+                0.4283
+            ],
+            "fileTop5": [
+                0.9234,
+                0.8794,
+                0.0627,
+                0.8977,
+                0.3649
+            ],
+            "attrWords": [
+                "top short",
+                "bottom short",
+                "shoulder bag",
+                "backpack",
+                "hat"
+            ]
+        }
+    },
+    ... 이하 생략
+}
+```
+
+형식으로 나감
+
+## 히스토리
+
+### 히스토리 저장
+request post /api/history
+
+image_name 에 저장하고싶은 video캡처 사진 이름을 넣어서요청
+
+![alt text](image-2.png)
+
+### 히스토리 요청
+request get /api/history
+
+response
+```
+[
+    {
+        "imageName": "image/sample.jpg/sample.jpg",
+        "imageCropped": "image/sample.jpg/sample.jpg_cropped.jpg",
+        "imageRectangle": "image/sample.jpg/sample.jpg_rectangle.jpg",
+        "video_image": "sample.mp4_frame60_person1.jpg",
+        "video_name": "sample.mp4",
+        "similarity": 98.92123387745694,
         "original_top5": [
-            0.7089,
-            0.8367,
-            0.744,
-            0.9329,
-            0.6406
+            0.9172,
+            0.5366,
+            0.0535,
+            0.653,
+            0.4283
         ],
         "file_top5": [
-            0.7089,
-            0.8367,
-            0.744,
-            0.9329,
-            0.6406
+            0.9234,
+            0.8794,
+            0.0627,
+            0.8977,
+            0.3649
         ],
         "attr_words": [
             "top short",
@@ -66,24 +153,9 @@ get /api/result
             "backpack",
             "hat"
         ],
-        "time": "0:11"
+        "time": "0:02"
     },
-    ...
-}
-```
-
-형식으로 나감
-
-## 히스토리
-
-```
-[
-    {
-        "imageName": "image/sample.jpg/sample.jpg",
-        "imageCropped": "image/sample.jpg/sample.jpg_cropped.jpg",
-        "imageRectangle": "image/sample.jpg/sample.jpg_rectangle.jpg",
-        "result": "{\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame330_person1.jpg\":{\"video_name\":\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:11\"},\"sample2.mp4_frame450_person6.jpg\":{\"video_name\":\"sample2.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:15\"},\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame450_person1.jpg\":{\"video_name\":\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:15\"},\"sample.mp4_frame930_person1.jpg\":{\"video_name\":\"sample.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:31\"},\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame480_person5.jpg\":{\"video_name\":\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:16\"},\"sample2.mp4_frame210_person2.jpg\":{\"video_name\":\"sample2.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:07\"},\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame450_person3.jpg\":{\"video_name\":\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:15\"},\"sample.mp4_frame990_person3.jpg\":{\"video_name\":\"sample.mp4\",\"similarity\":86.58740473605427,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7574,0.9176,0.967,0.9873,0.4349],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:33\"},\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4_frame360_person2.jpg\":{\"video_name\":\"2021-08-02_06-21-00_mon_sunny_out_ja-ma_C0041.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:12\"},\"sample.mp4_frame630_person1.jpg\":{\"video_name\":\"sample.mp4\",\"similarity\":97.90707025693796,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7436,0.638,0.6995,0.7862,0.5816],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:21\"},\"sample.mp4_frame1230_person2.jpg\":{\"video_name\":\"sample.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:41\"},\"sample2.mp4_frame570_person5.jpg\":{\"video_name\":\"sample2.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:19\"},\"sample.mp4_frame1290_person1.jpg\":{\"video_name\":\"sample.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:43\"},\"sample2.mp4_frame510_person4.jpg\":{\"video_name\":\"sample2.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:17\"},\"sample2.mp4_frame120_person3.jpg\":{\"video_name\":\"sample2.mp4\",\"similarity\":99.99999999999997,\"original_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"file_top5\":[0.7089,0.8367,0.744,0.9329,0.6406],\"attr_words\":[\"top short\",\"bottom short\",\"shoulder bag\",\"backpack\",\"hat\"],\"time\":\"0:04\"}}"
-    }
+    ...이하 생략
 ]
 ```
 

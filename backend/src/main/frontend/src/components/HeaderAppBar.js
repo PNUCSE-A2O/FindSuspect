@@ -9,7 +9,7 @@ const HeaderAppBar = () => {
   
   const navigate = useNavigate();
   const handleClickHome = () => {
-    navigate('/home');
+    navigate('/');
 };
 
   return (

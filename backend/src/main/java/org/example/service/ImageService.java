@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
 public class ImageService {
     private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image/";
     private ObjectMapper objectMapper = new ObjectMapper();
-    private Map<String, ResultDTO> result = new HashMap<>();
+    private List<Map.Entry<String, ResultDTO>> result;
+
     @Autowired
     HistoryRepository historyRepository;
     private Util util = new Util();
@@ -63,7 +64,7 @@ public class ImageService {
         imagePython(imageFile.getOriginalFilename());
     }
 
-    public Map<String, ResultDTO> getResult(){
+    public List<Map.Entry<String, ResultDTO>> getResult(){
         return this.result;
     }
     
@@ -75,32 +76,33 @@ public class ImageService {
         if(exitCode != 0) throw new BadRequestException("image feature error");
         finalImage = fileName;
         readResultJson(fileName);
-        saveHistory(fileName);
+        //saveHistory(fileName);
     }
 
-    private void saveHistory(String fileName) {
-        String originalFile = "image/"+ fileName +"/"+fileName;
+     public void saveHistory(String imageName) {
+        String originalFile = "image/"+ finalImage +"/"+finalImage;
         String croppedFile = originalFile +"_cropped.jpg";
         String rectangleFile = originalFile +"_rectangle.jpg";
-        String resultString;
-        try{
-            resultString =  objectMapper.writeValueAsString(result);
-            //System.out.println(resultString);
-        }catch(JsonProcessingException e){
-            throw new BadRequestException("json write fail");
+        ResultDTO resultDTO = null;
+        if(this.result == null)
+            throw new BadRequestException("result is null");
+        for(Map.Entry<String,ResultDTO> mp : result){
+            if(mp.getKey().equals(imageName)){
+                resultDTO= mp.getValue();
+            }
         }
-        String unescapedResultString = StringEscapeUtils.unescapeJava(resultString);
-        History history = new History(originalFile,croppedFile,rectangleFile,unescapedResultString);
+        if(resultDTO == null) throw new BadRequestException("imageName not found");
+        History history = new History(originalFile,croppedFile,rectangleFile,imageName,resultDTO);
         historyRepository.save(history);
     }
 
-    private void readResultJson(String fileName) {
+     private void readResultJson(String fileName) {
         //result.json읽어 파싱 후 List로
         String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName+"_cropped.jpg";
         File dir = new File(dirPath);
         File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 
-        result = new HashMap<>();
+        Map<String, ResultDTO> resultMap = new HashMap<>();
 
         assert jsonFiles != null;
         for (File jsonFile : jsonFiles) {
@@ -115,13 +117,13 @@ public class ImageService {
             // 파싱된 데이터를 SaveDataDto 객체로 변환
             for (Map.Entry<String, Object> entry : fileData.entrySet()) {
                 ResultDTO dto = objectMapper.convertValue(entry.getValue(), ResultDTO.class);
-                result.put(entry.getKey(), dto);
+                resultMap.put(entry.getKey(), dto);
             }
         }
 
         // frame 번호를 추출하여 time 설정
         Pattern pattern = Pattern.compile("frame(\\d+)");
-        for (Map.Entry<String, ResultDTO> entry : result.entrySet()) {
+        for (Map.Entry<String, ResultDTO> entry : resultMap.entrySet()) {
             String key = entry.getKey();
             ResultDTO dto = entry.getValue();
 
@@ -134,18 +136,21 @@ public class ImageService {
                 dto.setTime(strTime);
             }
         }
-        
+
+        result = new ArrayList<>(resultMap.entrySet());
+        result.sort((e1, e2) -> Double.compare(e2.getValue().getSimilarity(), e1.getValue().getSimilarity()));
+
     }
 
     public List<HistoryDTO> getHistory() {
         List<History> histories = historyRepository.findAll();
-        History his = histories.get(0);
+        //History his = histories.get(0);
         
         List<HistoryDTO> result = histories.stream().map(History::toDTO).toList();
         return  result;
     }
     
     public String getPath(){
-        return "public/image/" + finalImage;
+        return "image/" + finalImage +"/" + finalImage;
     }
 }
