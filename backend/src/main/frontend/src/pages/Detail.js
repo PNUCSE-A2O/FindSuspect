@@ -1,11 +1,48 @@
 import React from 'react';
-import { Typography, Container, Card, CardContent, Grid, Paper, Table, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { Typography, Container, Card, CardContent, Grid, Paper, Table, TableBody, TableRow, TableCell, TableContainer, Button, Box } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
+import axios from 'axios';
+import qs from 'qs';
+import History2 from './History2';
 
 const Detail = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { data } = location.state || {}; 
+  const { data, imagePath, rectanglePath, key } = location.state || {}; 
+  console.log(data);
+  console.log(imagePath);
+  console.log(key);
+
+  const handleSave = async () => {
+    try {
+      
+      const saveData = {
+        image_name: key, // 실제 이미지 이름으로 교체                 
+      };
+  
+      
+      const urlEncodedData = qs.stringify(saveData);
+  
+      
+      await axios.post('/api/history', urlEncodedData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+  
+      alert('History saved successfully!');
+    } catch (error) {
+      console.error('Error saving history:', error);
+      alert('Failed to save history.');
+    }
+  };
+
+  const handleShowHistory = async () => {
+    navigate('/History2');
+  };
+    
+
 
   return (
     <>
@@ -21,7 +58,7 @@ const Detail = () => {
             <Grid item xs={12} md={6}>
               <Typography variant="subtitle1" gutterBottom><strong>Input Crop:</strong></Typography>
               <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img src={data.imagePath || 'default-placeholder.png'} alt="Detected" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
+                <img src={imagePath || 'default-placeholder.png'} alt="Detected" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
               </Paper>
               
             </Grid>
@@ -29,7 +66,7 @@ const Detail = () => {
             <Grid item xs={12} md={6}>
               <Typography variant="subtitle1" gutterBottom><strong>Found Crop:</strong></Typography>
               <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img src={data.foundImagePath || 'default-placeholder.png'} alt="Result" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
+                <img src={rectanglePath || 'default-placeholder.png'} alt="Result" style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
               </Paper>
 
             </Grid>
@@ -41,8 +78,8 @@ const Detail = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Typography variant="subtitle1" style={{ marginTop: '20px' }}><strong>Features:</strong></Typography> {/* 표 위에 공간 추가 */}
-              <TableContainer component={Paper} sx={{ maxWidth: 400, margin: 'auto', marginBottom: '20px', marginTop: '20px' }}> {/* 표 아래 공간 추가 */}
+              <Typography variant="subtitle1" style={{ marginTop: '20px' }}><strong>Features:</strong></Typography>
+              <TableContainer component={Paper} sx={{ maxWidth: 400, margin: 'auto', marginBottom: '20px', marginTop: '20px' }}>
                 <Table>
                     <TableBody>
                         <TableRow>
@@ -63,6 +100,17 @@ const Detail = () => {
             </Grid>
           </Grid>
         </CardContent>
+
+        
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Button variant="contained" sx={{ bgcolor: 'skyblue', color: 'white', m: 2 }} onClick={handleSave}>
+              Save
+            </Button>
+          <Button variant="contained" sx={{ bgcolor: 'skyblue', color: 'white', m: 2 }} onClick={handleShowHistory}>
+            Show History
+          </Button>
+        </Box>
+        
       </Card>
     </Container>
     </>

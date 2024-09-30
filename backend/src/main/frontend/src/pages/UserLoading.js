@@ -12,7 +12,7 @@ const UserLoading = () => {
 
     const finishLoading = () => {
         setLoading(false);
-        navigate('/result');
+        navigate('/history');
     }
 
     useEffect(() => {

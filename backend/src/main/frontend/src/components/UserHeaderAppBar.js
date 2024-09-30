@@ -27,7 +27,7 @@ const UserHeaderAppBar = () => {
 
     
     const handleClickHome = () => {
-        navigate('/home');
+        navigate('/');
     };
 
     return (

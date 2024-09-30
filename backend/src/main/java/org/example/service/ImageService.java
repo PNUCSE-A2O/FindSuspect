@@ -129,9 +129,9 @@ public class ImageService {
 
             Matcher matcher = pattern.matcher(key);
             if (matcher.find()) {
-                int frameNumber = Integer.parseInt(matcher.group(1));
-                int minute = frameNumber / (60 * FPS);
-                int second = (frameNumber / FPS) % 60;
+                int time = Integer.parseInt(matcher.group(1));
+                int minute = time / (60);
+                int second = (time) % 60;
                 String strTime = String.format("%d:%02d", minute, second);
                 dto.setTime(strTime);
             }

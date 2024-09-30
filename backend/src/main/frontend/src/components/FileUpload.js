@@ -36,11 +36,11 @@ function FileUpload() {
                     if (fileType === 'image') {
                         setImages([...imageFile, response.data.filePath]);
                         alert('이미지 업로드 완료');
-                        navigate('/result');
+                        navigate('/history');
                     } else if (fileType === 'video') {
                         setVideos([...videoFile, response.data.filePath]);
                         alert('비디오 업로드 완료');
-                        navigate('/Home');
+                        navigate('/');
                         setLoading(false);
                         setIsDisabled(true);
                     }

@@ -9,7 +9,7 @@ import AdminLoading from '../components/AdminLoading';
 const AdminUpload = () => {
     const { loading, setLoading } = useLoadingState();
     const [frameInterval, setFrameInterval] = useState(30); // 기본 프레임 값
-
+    /*
     const handleSliderChange = (event, newValue) => {
         setFrameInterval(newValue);
     };
@@ -25,14 +25,7 @@ const AdminUpload = () => {
             setLoading(false); 
         }
     };
-
-    return (
-        <>
-            <HeaderAppBar />
-            <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px', display: 'flex' }}>
-                
-                
-                <Box style={{ width: '40%', marginRight: '20px', textAlign: 'left', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <Box style={{ width: '40%', marginRight: '20px', textAlign: 'left', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
                     <Typography variant="h6" style={{ marginBottom: '20px', fontWeight: 'bold' }}>
                         Frame Detection Interval
                     </Typography>
@@ -74,8 +67,13 @@ const AdminUpload = () => {
                         Apply
                     </Button>
                 </Box>
+    */
 
-                <Box style={{ width: '60%' }}>
+    return (
+        <>
+            <HeaderAppBar />
+            <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px'}}>
+                <Box>
                     {loading ? (
                         <AdminLoading />
                     ) : (

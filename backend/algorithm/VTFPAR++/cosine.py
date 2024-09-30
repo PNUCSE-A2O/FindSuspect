@@ -3,6 +3,43 @@ import json
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+attr_words = [
+    '짧은 상의',  # top short, 상의 길이
+    '짧은 하의',  # bottom short, 하의 길이
+    '숄더백', '백팩',  # shoulder bag, backpack
+    '모자', '손가방', '긴 머리', '여성',  # hat, hand bag, long hair, female
+    '하의 치마',  # bottom skirt, 하의 종류
+    '걷는 중',  # walking
+    '달리는 중',  # running
+    '타고 있는 중',  # riding
+    '서 있는 중',  # staying
+    '동작 다양함',  # motion varies
+    '상의 검정색',  # top black
+    '상의 보라색',  # top purple
+    '상의 초록색',  # top green
+    '상의 파란색',  # top blue
+    '상의 회색',  # top gray
+    '상의 흰색',  # top white
+    '상의 노란색',  # top yellow
+    '상의 빨간색',  # top red
+    '상의 복잡한 색상',  # top complex
+    '하의 흰색',  # bottom white
+    '하의 보라색',  # bottom purple
+    '하의 검정색',  # bottom black
+    '하의 초록색',  # bottom green
+    '하의 회색',  # bottom gray
+    '하의 분홍색',  # bottom pink
+    '하의 노란색',  # bottom yellow
+    '하의 파란색',  # bottom blue
+    '하의 갈색',  # bottom brown
+    '하의 복잡한 색상',  # bottom complex
+    '젊은',  # young
+    '청소년',  # teenager
+    '성인',  # adult
+    '노인'  # old
+]
+
+
 def get_similarity(feature, new_attr_words, image_name):
     # features 폴더에서 파일 목록을 가져오기
     input_folder = "features"
@@ -42,7 +79,7 @@ def get_similarity(feature, new_attr_words, image_name):
                     feature_vec1 = np.array([feature[i]]).reshape(1, -1)
                     feature_vec2 = np.array([value[i]]).reshape(1, -1)
                     feature_similarity = cosine_similarity(feature_vec1, feature_vec2)[0][0]
-                    feature_similarities.append((feature_similarity, feature[i], value[i], new_attr_words[i]))
+                    feature_similarities.append((feature_similarity, feature[i], value[i], attr_words[i]))
 
                 # 유사도 상위 5개의 feature와 속성 이름 추출
                 top_5_features = sorted(feature_similarities, key=lambda x: x[0], reverse=True)[:5]

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const History = () => {
     const [latestImagePath, setLatestImagePath] = useState(null);
-    const {loading, setLoading} = useLoadingState();
+    const {loading, setLoading} = useLoadingState(null);
     const [resultData, setResultData] = useState([]);
     const navigate = useNavigate(); 
 
@@ -17,10 +17,7 @@ const History = () => {
                 console.log(response.data);
                 if (response && response.data) {
                     let basePath = response.data;
-    
-                    const baseImagePath = basePath.replace(/^public\//, '');
-                    
-                    setLatestImagePath(`/${baseImagePath}`);
+                    setLatestImagePath(`${basePath}`);
                 }
             })
             .catch(error => {
@@ -32,6 +29,7 @@ const History = () => {
         setLoading(true);
         axios.get('/api/result')
             .then(response => {
+                console.log(response.data); 
                 setLoading(false);
                 setResultData(Object.entries(response.data)); 
             })
@@ -40,14 +38,27 @@ const History = () => {
             });
     }, []);
 
+    
+    useEffect(() => {
+        console.log("Updated resultData:", resultData); 
+    }, [resultData]);
+
     return (
         <>
         <UserHeaderAppBar/>
         <Container maxWidth="lg" style={{ marginTop: '50px' }}>
             {resultData.map(([key, details], index) => {
-                // 변수는 JSX 안에 들어가기 전에 선언되어야 합니다.
-                const rectangleImagePath = `/video/${details.video_name}/${key}`;
-
+                //console.log("Key:", key);
+                //console.log("Details:", details);
+                //console.log("Index:", index);
+                
+                const firstKey = Object.keys(details)[0];
+                const videoDetails = details[firstKey];  // 실제 데이터 접근
+                const rectangle = firstKey.replace('.jpg', '_rectangle.jpg'); 
+                const rectangleImagePath = `video/${videoDetails.video_name}/${rectangle}`;
+                console.log(rectangleImagePath);
+                console.log(latestImagePath);
+                
                 return (
                     <Card sx={{ display: 'flex', mb: 2, justifyContent: 'space-between' }} key={index}>
                         <CardContent sx={{ flex: '1 0 auto', display: 'flex', alignItems: 'center' }}>
@@ -58,9 +69,9 @@ const History = () => {
                             />
                             <Box>
                                 <Typography><strong>Result:</strong> </Typography>
-                                <Typography variant="subtitle1"><strong>Video Source:</strong> {details.video_name}</Typography>
-                                <Typography variant="subtitle1"><strong>Time:</strong> {details.time}</Typography>
-                                <Typography variant="subtitle1"><strong>Detected Person:</strong></Typography>
+                                <Typography variant="subtitle1"><strong>Video Source:</strong> {videoDetails.video_name}</Typography>
+                                <Typography variant="subtitle1"><strong>Time:</strong> {videoDetails.time}</Typography>
+                                <Typography variant="subtitle1"><strong>Input Image:</strong></Typography>
                                 <img
                                     src={`${latestImagePath}`}
                                     alt="Rectangle"
@@ -71,9 +82,10 @@ const History = () => {
                         <Button variant="contained" sx={{ bgcolor: 'skyblue', color: 'white', alignSelf: 'end', m: 2 }}
                          onClick={() => navigate('/detail', { 
                             state: { 
-                                data: details,
+                                data: videoDetails,
                                 imagePath: latestImagePath,
-                                foundImagePath: rectangleImagePath
+                                rectanglePath: rectangleImagePath,
+                                key: firstKey
                             } 
                         })}
                         >View</Button>
