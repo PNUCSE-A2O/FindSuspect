@@ -61,23 +61,22 @@ const History2 = () => {
                       </Typography>
                     </Grid>
 
-                    {/* 두 번째 열: 이미지 데이터 */}
+                    
                     <Grid item xs={12} md={6}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginBottom: '10px', textAlign: 'left' }}>
                         <strong>Images:</strong>
                       </Typography>
                       <Box display="flex" justifyContent="space-around" alignItems="center">
-                        {/* Input Image */}
+                        
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
                           <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Input Image</Typography>
                         </Paper>
-                        {/* Cropped Image */}
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
                           <img src={item.imageCropped} alt="Cropped" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Cropped</Typography>
                         </Paper>
-                        {/* Rectangle Image */}
+                        
                         {console.log(`Rectangle Image src: ${rectangleImagePath}`)}
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1' }}>
                           <img src={rectangleImagePath} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />

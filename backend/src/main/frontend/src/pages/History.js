@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 const History = () => {
     const [latestImagePath, setLatestImagePath] = useState(null);
-    const {loading, setLoading} = useLoadingState(null);
+    const { loading, setLoading } = useLoadingState(null);
     const [resultData, setResultData] = useState([]);
+    const [validCards, setValidCards] = useState([]); // 유효한 카드만 저장
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -38,27 +39,45 @@ const History = () => {
             });
     }, []);
 
-    
     useEffect(() => {
         console.log("Updated resultData:", resultData); 
-    }, [resultData]);
+        // 이미지 경로가 유효한지 비동기적으로 검사하여 유효한 카드만 필터링
+        const checkImageValidity = async () => {
+            const validCardsPromises = resultData.map(async ([key, details]) => {
+                const firstKey = Object.keys(details)[0];
+                const videoDetails = details[firstKey];
+                const rectangle = firstKey.replace('.jpg', '_rectangle.jpg');
+                const rectangleImagePath = `video/${videoDetails.video_name}/${rectangle}`;
+
+                try {
+                    
+                    const response = await fetch(rectangleImagePath);
+                    if (response.ok && latestImagePath) {
+                        return { key, details, rectangleImagePath }; 
+                    }
+                } catch (error) {
+                    console.error("이미지를 로드할 수 없음:", error);
+                }
+                return null; 
+            });
+
+            const validCardsResults = await Promise.all(validCardsPromises);
+            setValidCards(validCardsResults.filter(card => card !== null)); // 유효한 카드만 저장
+        };
+
+        if (resultData.length > 0) {
+            checkImageValidity();
+        }
+    }, [resultData, latestImagePath]);
 
     return (
         <>
         <UserHeaderAppBar/>
         <Container maxWidth="lg" style={{ marginTop: '50px' }}>
-            {resultData.map(([key, details], index) => {
-                //console.log("Key:", key);
-                //console.log("Details:", details);
-                //console.log("Index:", index);
-                
+            {validCards.map(({ key, details, rectangleImagePath }, index) => {
                 const firstKey = Object.keys(details)[0];
-                const videoDetails = details[firstKey];  // 실제 데이터 접근
-                const rectangle = firstKey.replace('.jpg', '_rectangle.jpg'); 
-                const rectangleImagePath = `video/${videoDetails.video_name}/${rectangle}`;
-                console.log(rectangleImagePath);
-                console.log(latestImagePath);
-                
+                const videoDetails = details[firstKey];  
+
                 return (
                     <Card sx={{ display: 'flex', mb: 2, justifyContent: 'space-between' }} key={index}>
                         <CardContent sx={{ flex: '1 0 auto', display: 'flex', alignItems: 'center' }}>
