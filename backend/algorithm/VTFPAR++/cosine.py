@@ -40,6 +40,7 @@ attr_words = [
 ]
 
 
+
 def get_similarity(feature, new_attr_words, image_name):
     # features 폴더에서 파일 목록을 가져오기
     input_folder = "features"
