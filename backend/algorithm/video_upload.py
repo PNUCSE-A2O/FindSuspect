@@ -45,16 +45,17 @@ def delete_folder(src_dir):
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # a.py와 b.py의 경로
-a_path = os.path.join(current_dir, 'crop', 'crop_video.py')
+#a_path = os.path.join(current_dir, 'crop', 'test_video.py')
+a_path = os.path.join(current_dir, 'crop', 'python_video.py')
 b_path = os.path.join(current_dir, 'VTFPAR++', 'all_image_test.py')
 
 src_folder = os.path.join(current_dir, 'crop', sys.argv[1])
 dst_folder = os.path.join(current_dir, 'VTFPAR++', 'person_snapshots')
-#front_folder = os.path.join("/data/FindSuspect/backend/src/main/frontend/video", sys.argv[0])
+front_folder = os.path.join("/data/FindSuspect/backend/src/main/frontend/video", sys.argv[0])
 
 # Python 파일 실행
 run_python_file(a_path, sys.argv[1])
 move_files(src_folder, dst_folder)
 run_python_file(b_path, sys.argv[1])
-#move_files(dst_folder, front_folder)
+move_files(dst_folder, front_folder)
 delete_folder(src_folder)

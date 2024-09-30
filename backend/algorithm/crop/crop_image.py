@@ -8,7 +8,7 @@ import sys
 
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 # YOLOv8 모델 로드
-model = YOLO('yolov10n.pt', verbose=False)
+model = YOLO('yolov9m_35_32.pt', verbose=False)
 
 # 비디오 파일이 있는 폴더 경로
 image_name = sys.argv[1]
@@ -39,12 +39,15 @@ for image_file in os.listdir(image_folder):
                     # 크롭된 이미지 저장
                     output_filename = f'{image_name}_cropped.jpg'
                     output_path = os.path.join(output_folder, output_filename)
+                    print(str(output_path))
                     cv2.imwrite(output_path, cropped_human)
 
                     output_path = os.path.join(image_folder, output_filename)
+                    print(str(output_path))
                     cv2.imwrite(output_path, cropped_human)
 
                     save_filename = f'{image_file}_rectangle.jpg'
                     output_path = os.path.join(image_folder, save_filename)
+                    print(str(output_path))
                     cv2.imwrite(output_path, frame_with_rectangle)
         

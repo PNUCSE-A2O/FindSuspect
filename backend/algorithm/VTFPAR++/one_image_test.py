@@ -136,10 +136,6 @@ def main():
     #save_json("/data/FindSuspect/backend/src/main/resources/data/result.json", top_5)
 
 
-    
-
-
-
 if __name__ == '__main__':
     main()
 
