@@ -35,7 +35,7 @@ else:
 
 # 비디오 폴더 내의 모든 파일에 대해 처리
 for video_file in os.listdir(video_folder):
-    if video_file.endswith(('.mp4', '.avi', '.mov')):  # 비디오 파일 확장자 추가 가능
+    if video_file.endswith(('.mp4', '.avi', '.mov', '.MP4', '.AVI', '.MOV')):  # 비디오 파일 확장자 추가 가능
         video_path = os.path.join(video_folder, video_file)
 
         # 비디오 파일 열기
