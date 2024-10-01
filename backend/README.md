@@ -120,43 +120,50 @@ image_name 에 저장하고싶은 video캡처 사진 이름을 넣어서요청
 ![alt text](image-2.png)
 
 ### 히스토리 요청
-request get /api/history
+request 
+get /api/history?page=0 //최신순 첫페이지 page=0이 기본값 생략 가능
+get /api/history?sort=videoName //영상이름 내림차순
 
 response
 ```
-[
-    {
-        "imageName": "image/sample.jpg/sample.jpg",
-        "imageCropped": "image/sample.jpg/sample.jpg_cropped.jpg",
-        "imageRectangle": "image/sample.jpg/sample.jpg_rectangle.jpg",
-        "video_image": "sample.mp4_frame60_person1.jpg",
-        "video_name": "sample.mp4",
-        "similarity": 98.92123387745694,
-        "original_top5": [
-            0.9172,
-            0.5366,
-            0.0535,
-            0.653,
-            0.4283
-        ],
-        "file_top5": [
-            0.9234,
-            0.8794,
-            0.0627,
-            0.8977,
-            0.3649
-        ],
-        "attr_words": [
-            "top short",
-            "bottom short",
-            "shoulder bag",
-            "backpack",
-            "hat"
-        ],
-        "time": "0:02"
+{
+    "histories": [
+        {
+            "imageName": "image/sample4.mp4_frame5_person1_cropped.jpg/sample4.mp4_frame5_person1_cropped.jpg",
+            "imageCropped": "image/sample4.mp4_frame5_person1_cropped.jpg/sample4.mp4_frame5_person1_cropped.jpg_cropped.jpg",
+            "imageRectangle": "image/sample4.mp4_frame5_person1_cropped.jpg/sample4.mp4_frame5_person1_cropped.jpg_rectangle.jpg",
+            "video_image": "sample2.mp4_frame20_person1.jpg",
+            "video_name": "sample2.mp4",
+            "similarity": 77.17966173943887,
+            "original_top5": [
+                0.7131,
+                0.9541,
+                0.0158,
+                0.9598,
+                0.4052
+            ],
+            "file_top5": [
+                0.7089,
+                0.8367,
+                0.744,
+                0.9329,
+                0.6406
+            ],
+            "attr_words": [
+                "짧은 상의",
+                "짧은 하의",
+                "숄더백",
+                "백팩",
+                "모자"
+            ],
+            "time": "0:20"
     },
-    ...이하 생략
-]
+    ...
+        
+    ],
+    "totalElements": 6, //총 개수
+    "totalPages": 2 //페이지 개수 (기본 5)
+}
 ```
 
 
