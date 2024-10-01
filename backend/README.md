@@ -36,7 +36,7 @@ response image/sample.jpg/sample.jpg
 
 ### 영상 경로
 
-request get /api/get/video
+request get /api/get/video 
 
 response 
 ```
@@ -50,7 +50,9 @@ response
 
 ## 결과
 
-get /api/result
+get /api/result //모든 영상을 정확도 순 정렬
+
+get /api/result/videoName //영상이름 오름차순 정렬 후 정확도 내림차순한 결과
 
 ```
 [
