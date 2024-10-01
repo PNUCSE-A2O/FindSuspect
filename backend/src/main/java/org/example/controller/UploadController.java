@@ -56,7 +56,7 @@ public class UploadController {
     }
 
     @DeleteMapping("/api/video")
-    public ResponseEntity<String> deleteVideo(@RequestParam("name")String name){
+    public ResponseEntity<String> deleteVideo(@RequestParam("video_name")String name){
         videoService.deleteVideo(name);
         return new ResponseEntity<>("",HttpStatus.OK);
     }

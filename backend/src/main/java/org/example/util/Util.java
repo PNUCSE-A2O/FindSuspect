@@ -5,7 +5,9 @@ import org.example.exception.BadRequestException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Util {
     public boolean checkCuda() {
         try {

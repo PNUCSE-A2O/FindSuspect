@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLoadingState } from '../context/LoadingContext';
 import FileUpload from '../components/FileUpload';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
+import ImageUpload from '../components/ImageUpload';
 
 const UserUpload = () => {
     const navigate = useNavigate();

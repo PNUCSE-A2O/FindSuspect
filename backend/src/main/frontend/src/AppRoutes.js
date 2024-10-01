@@ -11,6 +11,8 @@ import EnterPassword from './pages/EnterPassword';
 import History from './pages/History';
 import Detail from './pages/Detail'
 import History2 from './pages/History2'
+import VideoList from './pages/VideoList'
+import UserLoading2 from './pages/Userloading2';
 
 const AppRoutes = () => {
     //<Route path="/adminLoading" element={<AdminLoading />} />
@@ -25,6 +27,8 @@ const AppRoutes = () => {
             <Route path='/History' element={<History/>} />
             <Route path='/Detail' element={<Detail/>} />
             <Route path='/History2' element={<History2/>} />
+            <Route path='/videolist' element={<VideoList/>} />
+            <Route path='/userloading2' element={<UserLoading2/>} />
         </Routes>
     );
 };

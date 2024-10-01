@@ -98,7 +98,7 @@ public class ImageService {
 
      private void readResultJson(String fileName) {
         //result.json읽어 파싱 후 List로
-        String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName+"_cropped.jpg";
+        String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName + "_cropped.jpg";
         File dir = new File(dirPath);
         File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 

@@ -3,9 +3,11 @@ package org.example.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.exception.BadRequestException;
 import org.example.util.Util;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import org.example.repository.HistoryRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +20,12 @@ import java.util.List;
 
 
 @Service
-@Validated
+@AllArgsConstructor
 public class VideoService {
     private final String UPLOAD_DIR_VIDEO = "/data/FindSuspect/backend/src/main/frontend/public/video/";
+    private final HistoryRepository historyRepository;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private Util util = new Util();
+    private final Util util;
 
     private void saveVideo(String dir, MultipartFile file) {
         // 원본 파일 이름
@@ -65,7 +68,8 @@ public class VideoService {
         Path path1 = (Paths.get(UPLOAD_DIR_VIDEO+name));
         Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VTFPAR++/features/",name+".json"));
         //System.out.println(path2.toString());
-
+        historyRepository.deleteByVideo_name(name);
+        
         try {
             //path1 폴더와 그 안의 파일/폴더 삭제
             File folder = path1.toFile();
@@ -96,7 +100,8 @@ public class VideoService {
 
             if (exitCode != 0) throw new BadRequestException("video feature error");
         } catch (Exception e) {
-            throw new BadRequestException("영상 저장 실패");
+            //throw new BadRequestException("영상 저장 실패");
+            e.printStackTrace();
         }
     }
 

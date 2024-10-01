@@ -9,7 +9,7 @@ const History = () => {
     const [latestImagePath, setLatestImagePath] = useState(null);
     const { loading, setLoading } = useLoadingState(null);
     const [resultData, setResultData] = useState([]);
-    const [validCards, setValidCards] = useState([]); // 유효한 카드만 저장
+    const [validCards, setValidCards] = useState([]); 
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -41,11 +41,11 @@ const History = () => {
 
     useEffect(() => {
         console.log("Updated resultData:", resultData); 
-        // 이미지 경로가 유효한지 비동기적으로 검사하여 유효한 카드만 필터링
         const checkImageValidity = async () => {
             const validCardsPromises = resultData.map(async ([key, details]) => {
                 const firstKey = Object.keys(details)[0];
                 const videoDetails = details[firstKey];
+                console.log(firstKey);
                 const rectangle = firstKey.replace('.jpg', '_rectangle.jpg');
                 const rectangleImagePath = `video/${videoDetails.video_name}/${rectangle}`;
 
@@ -62,7 +62,7 @@ const History = () => {
             });
 
             const validCardsResults = await Promise.all(validCardsPromises);
-            setValidCards(validCardsResults.filter(card => card !== null)); // 유효한 카드만 저장
+            setValidCards(validCardsResults.filter(card => card !== null)); 
         };
 
         if (resultData.length > 0) {
@@ -87,7 +87,7 @@ const History = () => {
                                 style={{ width: 300, height: 300, objectFit: 'scale-down', marginRight: '20px' }}
                             />
                             <Box>
-                                <Typography><strong>Result:</strong> </Typography>
+                                <Typography variant="subtitle1"><strong>유사도: </strong> {videoDetails.similarity}</Typography>
                                 <Typography variant="subtitle1"><strong>Video Source:</strong> {videoDetails.video_name}</Typography>
                                 <Typography variant="subtitle1"><strong>Time:</strong> {videoDetails.time}</Typography>
                                 <Typography variant="subtitle1"><strong>Input Image:</strong></Typography>

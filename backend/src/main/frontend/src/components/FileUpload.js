@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useLoadingState } from '../context/LoadingContext';
 
+
 function FileUpload() {
     const [imageFile, setImages] = useState([]);
     const [videoFile, setVideos] = useState([]);
@@ -15,17 +16,16 @@ function FileUpload() {
     let formData = new FormData();
 
     const handleClick = () => {
-        
         setLoading(true);
         const config = {
             header: { 'content-type': 'multipart/form-data' }
         };
         formData.set("file", file2send[0]);
 
-        const fileType = file2send[0].type.split('/')[0]; // Get the file type (image or video)
+        const fileType = file2send[0].type.split('/')[0]; 
         const uploadUrl = fileType === 'image' ? '/api/upload/image' : '/api/upload/video';
-        if(fileType == 'image'){
-            navigate('/userLoading');
+        if(fileType === 'image'){
+            navigate('/userLoading2');
         }
         console.log(file2send);
         
@@ -35,12 +35,12 @@ function FileUpload() {
                 if (response.status === 200) {
                     if (fileType === 'image') {
                         setImages([...imageFile, response.data.filePath]);
-                        alert('이미지 업로드 완료');
-                        navigate('/history');
+                        //alert('이미지 업로드 완료');
+                        //navigate('/history');
                     } else if (fileType === 'video') {
                         setVideos([...videoFile, response.data.filePath]);
                         alert('비디오 업로드 완료');
-                        navigate('/');
+                        //navigate('/history');
                         setLoading(false);
                         setIsDisabled(true);
                     }
@@ -58,7 +58,10 @@ function FileUpload() {
         setFile2send(files);
         console.log(files);
         setTimeout(() => {setIsDisabled(false);}, 1000);
-        
+    };
+
+    const goToVideoList = () => {
+        navigate('/videolist'); 
     };
 
     return (
@@ -66,9 +69,27 @@ function FileUpload() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <MyDropzone onDrop={dropHandler} />
             </div>
-            <Button className="pulse" variant="contained" color="secondary" sx={{ borderRadius: 5 }} size="large"
-            onClick={handleClick} disabled={isDisabled} style={{ marginTop: '30px', textTransform: 'none', fontWeight: 'bold' }}>
-            check
+            <Button 
+                className="pulse" 
+                variant="contained" 
+                color="secondary" 
+                sx={{ borderRadius: 5 }} 
+                size="large"
+                onClick={handleClick} 
+                disabled={isDisabled} 
+                style={{ marginTop: '30px', textTransform: 'none', fontWeight: 'bold' }}
+            >
+                check
+            </Button>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                sx={{ borderRadius: 5 }} 
+                size="large"
+                onClick={goToVideoList} 
+                style={{ marginTop: '30px', marginLeft: '20px', textTransform: 'none', fontWeight: 'bold' }}
+            >
+                Video List
             </Button>
         </>
     );
