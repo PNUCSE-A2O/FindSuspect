@@ -121,7 +121,9 @@ image_name 에 저장하고싶은 video캡처 사진 이름을 넣어서요청
 
 ### 히스토리 요청
 request 
+
 get /api/history?page=0 //최신순 첫페이지 page=0이 기본값 생략 가능
+
 get /api/history?sort=videoName //영상이름 내림차순
 
 response
