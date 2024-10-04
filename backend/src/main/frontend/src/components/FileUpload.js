@@ -40,7 +40,7 @@ function FileUpload() {
                     } else if (fileType === 'video') {
                         setVideos([...videoFile, response.data.filePath]);
                         alert('비디오 업로드 완료');
-                        //navigate('/history');
+                        navigate('/');
                         setLoading(false);
                         setIsDisabled(true);
                     }

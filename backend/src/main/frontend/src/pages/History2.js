@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Box, Card, CardContent, Grid, Paper, Divider } from '@mui/material';
+import { Container, Typography, Box, Card, CardContent, Grid, Paper, Divider, Button } from '@mui/material';
 import UserHeaderAppBar from '../components/UserHeaderAppBar';
 
 const History2 = () => {
   const [historyData, setHistoryData] = useState([]);
-
+  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 (0부터 시작)
+  
   // 히스토리 데이터를 API에서 가져와 상태로 설정
   useEffect(() => {
-    axios.get('/api/history')
+    axios.get(`/api/history?page=${currentPage}`)
       .then(response => {
         console.log(response.data);
-        setHistoryData(response.data); 
+        setHistoryData(response.data.histories); // histories 배열만 상태로 설정
+        setTotalPages(response.data.totalPages); // 총 페이지 수 설정
       })
       .catch(error => {
         console.error('히스토리 데이터를 가져오는 중 오류 발생:', error);
       });
-  }, []);
+  }, [currentPage]); // currentPage가 변경될 때마다 데이터 가져옴
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -26,9 +34,14 @@ const History2 = () => {
 
         {historyData.length > 0 ? (
           historyData.map((item, index) => {
-            // JSX 바깥에서 자바스크립트 변수 선언
-            const rectangle = (item.video_image).replace('.jpg', '_rectangle.jpg'); // 변환된 이미지 파일명
-            const rectangleImagePath = `video/${item.video_name}/${rectangle}`; // 이미지 경로
+            
+            let rectangle = item.video_image; 
+            if (rectangle.endsWith('_cropped.jpg')) {
+              rectangle = rectangle.replace('_cropped.jpg', '_rectangle.jpg');
+            } else if (rectangle.endsWith('.jpg')) {
+              rectangle = rectangle.replace('.jpg', '_rectangle.jpg');
+            }
+            const rectangleImagePath = `video/${item.video_name}/${rectangle}`; 
 
             return (
               <Card key={index} style={{ marginBottom: '20px', backgroundColor: '#f9f9f9', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -37,7 +50,6 @@ const History2 = () => {
                   <Divider style={{ marginBottom: '20px' }} />
 
                   <Grid container spacing={2}>
-                    
                     <Grid item xs={12} md={6} style={{ paddingLeft: '50px', paddingTop: '30px' }}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', textAlign: 'left', marginBottom: '5px' }}>
                         <strong>Video Name:</strong>
@@ -61,13 +73,11 @@ const History2 = () => {
                       </Typography>
                     </Grid>
 
-                    
                     <Grid item xs={12} md={6}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginBottom: '10px', textAlign: 'left' }}>
                         <strong>Images:</strong>
                       </Typography>
                       <Box display="flex" justifyContent="space-around" alignItems="center">
-                        
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
                           <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Input Image</Typography>
@@ -76,8 +86,6 @@ const History2 = () => {
                           <img src={item.imageCropped} alt="Cropped" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Cropped</Typography>
                         </Paper>
-                        
-                        {console.log(`Rectangle Image src: ${rectangleImagePath}`)}
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1' }}>
                           <img src={rectangleImagePath} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Rectangle</Typography>
@@ -85,7 +93,6 @@ const History2 = () => {
                       </Box>
                     </Grid>
 
-                    
                     <Grid item xs={12}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginTop: '20px', textAlign: 'center' }}>
                         <strong>Attributes & Features:</strong>
@@ -117,6 +124,20 @@ const History2 = () => {
         ) : (
           <Typography align="center" style={{ color: 'black', marginTop: '50px' }}>No history available.</Typography>
         )}
+
+        <Box display="flex" justifyContent="center" alignItems="center" marginTop="20px">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Button 
+              key={index} 
+              variant={currentPage === index ? "contained" : "outlined"} 
+              color="primary" 
+              onClick={() => handlePageChange(index)} 
+              style={{ margin: '0 5px' }}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </Box>
       </Container>
     </>
   );

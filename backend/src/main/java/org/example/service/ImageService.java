@@ -2,13 +2,19 @@ package org.example.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Comparator;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.example.dto.HistoryDTO;
+import org.example.dto.PageHistory;
 import org.example.dto.ResultDTO;
 import org.example.entity.History;
 import org.example.exception.BadRequestException;
 import org.example.repository.HistoryRepository;
 import org.example.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -142,15 +148,22 @@ public class ImageService {
 
     }
 
-    public List<HistoryDTO> getHistory() {
-        List<History> histories = historyRepository.findAll();
-        //History his = histories.get(0);
-        
-        List<HistoryDTO> result = histories.stream().map(History::toDTO).toList();
-        return  result;
+    public PageHistory getHistory(Pageable pageable) {
+        Page<History> histories = historyRepository.findAll(pageable);
+        List<HistoryDTO> his = histories.getContent().stream().map(History::toDTO).toList();
+        return new PageHistory(his,histories.getTotalElements(), histories.getTotalPages());
     }
     
     public String getPath(){
         return "image/" + finalImage +"/" + finalImage;
     }
+
+    public List<Entry<String, ResultDTO>> getResultByVideoName() {
+        return result.stream()
+                // 두 개의 Comparator를 먼저 videoName 오름차순, 그다음 similarity 내림차순으로 연결
+                .sorted(Comparator.comparing((Map.Entry<String, ResultDTO> entry) -> entry.getValue().getVideoName()) // videoName 오름차순
+                        .thenComparing(Comparator.comparing((Map.Entry<String, ResultDTO> entry) -> entry.getValue().getSimilarity()).reversed())) // similarity 내림차순
+                .collect(Collectors.toList());
+    }
+
 }

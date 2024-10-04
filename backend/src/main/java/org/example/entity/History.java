@@ -22,8 +22,8 @@ public class History {
     @CreatedDate
     LocalDateTime createdAt;
 
-    String video_image;
-    String video_name;
+    String videoImage;
+    String videoName;
     double similarity;
     @ElementCollection
     List<Double> original_top5;
@@ -37,8 +37,8 @@ public class History {
         this.imageName = imageName;
         this.imageCropped = imageCropped;
         this.imageRectangle = imageRectangle;
-        this.video_image = video_image;
-        this.video_name = result.getVideoName();
+        this.videoImage = video_image;
+        this.videoName = result.getVideoName();
         this.similarity = result.getSimilarity();
         this.original_top5 = result.getOriginalTop5();
         this.file_top5=result.getFileTop5();
@@ -65,7 +65,7 @@ public class History {
 
     public HistoryDTO toDTO(){
         return new HistoryDTO(imageName, imageCropped, imageRectangle,
-                 video_image, video_name, similarity,
+                 videoImage, videoName, similarity,
                  original_top5, file_top5, attr_words, time);
     }
 }

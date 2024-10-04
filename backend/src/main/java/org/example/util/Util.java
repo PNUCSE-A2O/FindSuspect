@@ -81,16 +81,38 @@ public class Util {
         return exitCode;
     }
 
-    public void init(){
-        File data = new File("/data/FindSuspect/backend/src/main/resources/data");
-        File image = new File("/data/FindSuspect/backend/src/main/frontend/public/image");
+    public void copyFile(String src, String dest) throws IOException {
+        try{
+            Path sourcePath = Paths.get(src);
+            Path destinationPath = Paths.get(dest);
 
-        deleteFolder(data);
-        deleteFolder(image);
+            // dest가 폴더인 경우 해당 폴더에 파일을 복사       
+            if (Files.isDirectory(destinationPath)) {
+                destinationPath = destinationPath.resolve(sourcePath.getFileName());
+            }
+            
+            if (Files.exists(potentialDestFile)) {
+                System.out.println("파일이 이미 존재합니다: " + potentialDestFile);
+                return; // 파일이 이미 존재하면 함수 종료
+            }
 
-        if (!data.mkdirs())
-            throw new BadRequestException("folder make fail");
-        if (!image.mkdirs())
-            throw new BadRequestException("folder make fail");
+            // 파일 복사
+            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        }catch(IOException e){
+            throw new BadRequestException("파일 복사 실패");
+        }
+        
     }
+    // public void init(){
+    //     File data = new File("/data/FindSuspect/backend/src/main/resources/data");
+    //     File image = new File("/data/FindSuspect/backend/src/main/frontend/public/image");
+
+    //     deleteFolder(data);
+    //     deleteFolder(image);
+
+    //     if (!data.mkdirs())
+    //         throw new BadRequestException("folder make fail");
+    //     if (!image.mkdirs())
+    //         throw new BadRequestException("folder make fail");
+    // }
 }

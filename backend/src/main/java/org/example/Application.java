@@ -7,8 +7,6 @@ import org.example.util.Util;
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
-        Util util = new Util();
-        util.init();
         SpringApplication.run(Application.class, args);
     }
 }

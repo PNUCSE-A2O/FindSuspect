@@ -49,3 +49,5 @@ algorithm/VTFPAR++/VTF-Pretrain.pth
 algorithm/OpenPAR/VTFPAR++/model/ViT-B-16.pt
 *.jpg
 *.txt
+
+application-secret.yml

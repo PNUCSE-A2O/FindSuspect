@@ -81,20 +81,20 @@ const Detail = () => {
               <Typography variant="subtitle1" style={{ marginTop: '20px' }}><strong>Features:</strong></Typography>
               <TableContainer component={Paper} sx={{ maxWidth: 400, margin: 'auto', marginBottom: '20px', marginTop: '20px' }}>
                 <Table>
-                    <TableBody>
-                        <TableRow>
-                        <TableCell align="center">Original Top5</TableCell>
-                        <TableCell align="center">Feature</TableCell>
-                        <TableCell align="center">File Top5</TableCell>
-                        </TableRow>
-                        {data.original_top5 && data.original_top5.map((feature, index) => (
-                            <TableRow key={index}>
-                                <TableCell align="center">{feature}</TableCell>
-                                <TableCell align="center">{data.attr_words[index]}</TableCell>
-                                <TableCell align="center">{data.file_top5[index]}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">Features</TableCell>
+                      <TableCell align="center">Original Top5</TableCell>
+                      <TableCell align="center">File Top5</TableCell>
+                    </TableRow>
+                      {data.original_top5 && data.original_top5.map((feature, index) => (
+                        <TableRow key={index}>
+                          <TableCell align="center">{data.attr_words[index]}</TableCell>
+                          <TableCell align="center">{feature}</TableCell>
+                          <TableCell align="center">{data.file_top5[index]}</TableCell>
+                    </TableRow>
+                  ))}
+                  </TableBody>
                 </Table>
               </TableContainer>
             </Grid>

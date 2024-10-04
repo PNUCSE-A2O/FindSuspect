@@ -14,16 +14,14 @@ const AdminUpload = () => {
             <HeaderAppBar />
             <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px'}}>
                 <Box>
-                    {loading ? (
-                        <AdminLoading />
-                    ) : (
+                     
                         <>
                             <Typography className="landing-text" variant="h4" style={{ marginBottom: '20px', fontWeight: 'bold' }}>
                                 Suspicious Video
                             </Typography>
                             <FileUpload/>
                         </>
-                    )}
+                    
                 </Box>
             </Container>
         </>

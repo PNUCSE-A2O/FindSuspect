@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.example.dto.PageHistory;
 
 @RestController
 public class UploadController {
@@ -54,6 +58,11 @@ public class UploadController {
         List<Map.Entry<String, ResultDTO>> data = imageService.getResult();
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
+    @GetMapping("/api/result/videoName")
+    public ResponseEntity<List<Map.Entry<String, ResultDTO>>> getResultByVideoName(){
+        List<Map.Entry<String, ResultDTO>> data = imageService.getResultByVideoName();
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
 
     @DeleteMapping("/api/video")
     public ResponseEntity<String> deleteVideo(@RequestParam("video_name")String name){
@@ -62,10 +71,14 @@ public class UploadController {
     }
 
     @GetMapping("/api/history")
-    public ResponseEntity<List<HistoryDTO>> getHistory(){
-        List<HistoryDTO> result = imageService.getHistory();
+    public ResponseEntity<PageHistory> getHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "id") String sortString){
+        Pageable pageable = PageRequest.of(pageNum,size, Sort.Direction.DESC, sortString);
+        PageHistory result = imageService.getHistory(pageable);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
     @PostMapping("/api/history")
     public ResponseEntity<String> saveHistory(@RequestParam("image_name") String imageName){
         imageService.saveHistory(imageName);
