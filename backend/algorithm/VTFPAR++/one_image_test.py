@@ -128,8 +128,8 @@ def main():
     # print(result)
     result=result.tolist()
     #포즈 제외하고 배열에 추가
-    result=[value for index, value in enumerate(result) if index < 9 or index > 15]
-    new_attr_words = [value for index, value in enumerate(attr_words) if index < 9 or index > 15]
+    result=[value for index, value in enumerate(result) if index < 9 or index > 14]
+    new_attr_words = [value for index, value in enumerate(attr_words) if index < 9 or index > 14]
     result=[round(value, 4) for value in result]
     
     top_5 = cosine.get_similarity(result, new_attr_words, image_name)

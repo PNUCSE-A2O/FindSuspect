@@ -119,7 +119,7 @@ def main():
         result=torch.sigmoid(result)
         result=result.tolist()
         #포즈 제외하고 배열에 추가
-        result=[value for index, value in enumerate(result) if index < 9 or index > 15]
+        result=[value for index, value in enumerate(result) if index < 9 or index > 14]
         result=[round(value, 4) for value in result]
         
         results_dict[file] = result  # 파일 이름을 키로, 결과 리스트를 값으로 저장
