@@ -4,42 +4,85 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 attr_words = [
-    '짧은 상의',  # top short, 상의 길이
-    '짧은 하의',  # bottom short, 하의 길이
-    '숄더백', '백팩',  # shoulder bag, backpack
-    '모자', '손가방', '긴 머리', '여성',  # hat, hand bag, long hair, female
-    '하의 치마',  # bottom skirt, 하의 종류
-    '걷는 중',  # walking
-    '달리는 중',  # running
-    '타고 있는 중',  # riding
-    '서 있는 중',  # staying
-    '동작 다양함',  # motion varies
-    '상의 검정색',  # top black
-    '상의 보라색',  # top purple
-    '상의 초록색',  # top green
-    '상의 파란색',  # top blue
-    '상의 회색',  # top gray
-    '상의 흰색',  # top white
-    '상의 노란색',  # top yellow
-    '상의 빨간색',  # top red
-    '상의 복잡한 색상',  # top complex
-    '하의 흰색',  # bottom white
-    '하의 보라색',  # bottom purple
-    '하의 검정색',  # bottom black
-    '하의 초록색',  # bottom green
-    '하의 회색',  # bottom gray
-    '하의 분홍색',  # bottom pink
-    '하의 노란색',  # bottom yellow
-    '하의 파란색',  # bottom blue
-    '하의 갈색',  # bottom brown
-    '하의 복잡한 색상',  # bottom complex
-    '젊은',  # young
-    '청소년',  # teenager
-    '성인',  # adult
-    '노인'  # old
+    '짧은 상의',    # 1
+    '짧은 하의',    # 2
+    '숄더백',       # 3
+    '백팩',         # 4
+    '모자',         # 5
+    '손가방',       # 6
+    '긴 머리',      # 7
+    '여성',         # 8
+    '하의 치마',     # 9
+    '걷는 중',       #10
+    '달리는 중',     #11
+    '타고 있는 중',   #12
+    '서 있는 중',    #13
+    '다양한 동작',
+    '상의 검정색',    #14
+    '상의 보라색',    #15
+    '상의 초록색',    #16
+    '상의 파란색',    #17
+    '상의 회색',     #18
+    '상의 흰색',     #19
+    '상의 노란색',   #20
+    '상의 빨간색',   #21
+    '상의 복잡한 색상',#22
+    '하의 흰색',     #23
+    '하의 보라색',    #24
+    '하의 검정색',    #25
+    '하의 초록색',    #26
+    '하의 회색',     #27
+    '하의 분홍색',    #28
+    '하의 노란색',    #29
+    '하의 파란색',    #30
+    '하의 갈색',     #31
+    '하의 복잡한 색상',#32
+    '젊은',         #33
+    '청소년',       #34
+    '성인',         #35
+    '노인'          #36
 ]
 
-
+# 속성 가중치 벡터 수정
+attribute_weights = np.array([
+    1.2,  # '짧은 상의' (상의 길이)
+    1.2,  # '짧은 하의' (하의 길이)
+    1.5,  # '숄더백'
+    1.5,  # '백팩'
+    1.8,  # '모자'
+    1.5,  # '손가방'
+    1.3,  # '긴 머리'
+    1.7,  # '여성'
+    1.5,  # '하의 치마'
+    1.0,  # '걷는 중'
+    1.0,  # '달리는 중'
+    1.0,  # '타고 있는 중'
+    1.0,  # '서 있는 중'
+    1.0,  # '다양한 동작'
+    1.6,  # '상의 검정색'
+    1.6,  # '상의 보라색'
+    1.6,  # '상의 초록색'
+    1.6,  # '상의 파란색'
+    1.6,  # '상의 회색'
+    1.6,  # '상의 흰색'
+    1.6,  # '상의 노란색'
+    1.6,  # '상의 빨간색'
+    1.6,  # '상의 복잡한 색상'
+    1.6,  # '하의 흰색'
+    1.6,  # '하의 보라색'
+    1.6,  # '하의 검정색'
+    1.6,  # '하의 초록색'
+    1.6,  # '하의 회색'
+    1.6,  # '하의 분홍색'
+    1.6,  # '하의 노란색'
+    1.6,  # '하의 파란색'
+    1.6,  # '하의 갈색'
+    1.6,  # '하의 복잡한 색상'
+    1.2,  # '젊은'
+    1.2,  # '청소년'
+    1.2,  # '성인'
+    1.2   # '노인'
+])
 
 def get_similarity(feature, new_attr_words, image_name):
     # features 폴더에서 파일 목록을 가져오기
@@ -61,9 +104,11 @@ def get_similarity(feature, new_attr_words, image_name):
             result = {}  # 최종 결과 저장
             # 딕셔너리 형태로 변환된 데이터 순회
             for key, value in data.items():
-                # 벡터화
-                vec1 = np.array(feature).reshape(1, -1)
-                vec2 = np.array(value).reshape(1, -1)
+                # 벡터화 및 가중치 적용
+                vec1 = np.array(feature) * attribute_weights
+                vec2 = np.array(value) * attribute_weights
+                vec1 = vec1.reshape(1, -1)
+                vec2 = vec2.reshape(1, -1)
                 # 코사인 유사도 계산
                 similarity = cosine_similarity(vec1, vec2)
                 result[key] = similarity[0][0]
@@ -77,16 +122,18 @@ def get_similarity(feature, new_attr_words, image_name):
 
                 # 각 feature의 유사도를 계산 (속성 이름은 동일)
                 for i in range(len(feature)):
-                    feature_vec1 = np.array([feature[i]]).reshape(1, -1)
-                    feature_vec2 = np.array([value[i]]).reshape(1, -1)
-                    feature_similarity = cosine_similarity(feature_vec1, feature_vec2)[0][0]
-                    feature_similarities.append((feature_similarity, feature[i], value[i], attr_words[i]))
+                    # 각 feature에 대해 가중치 적용
+                    feature_weight = attribute_weights[i]
+                    feature_vec1 = np.array([feature[i] * feature_weight]).reshape(1, -1)
+                    feature_vec2 = np.array([value[i] * feature_weight]).reshape(1, -1)
+                    difference = abs(feature_vec1 - feature_vec2)
+                    feature_similarities.append((difference, feature[i], value[i], attr_words[i]))
 
                 # 유사도 상위 5개의 feature와 속성 이름 추출
-                top_5_features = sorted(feature_similarities, key=lambda x: x[0], reverse=True)[:5]
+                top_5_features = sorted(feature_similarities, key=lambda x: x[0])[:5]
                 top_5_input_values = [item[1] for item in top_5_features]  # 상위 5개의 원본 feature 값
                 top_5_file_values = [item[2] for item in top_5_features]  # 상위 5개의 파일 feature 값
-                top_5_names = [item[3] for item in top_5_features]  # 상위 5개의 속성 이름
+                top_5_names = [item[3] for item in top_5_features]        # 상위 5개의 속성 이름
                 video_name_idx = key.find('mp4') + len('mp4')
                 video_name = key[:video_name_idx]
                 detailed_result[key] = {
