@@ -5,7 +5,7 @@ import AdminUpload from './pages/AdminUpload';
 import UserLoading from './pages/UserLoading';
 import UserUpload from './pages/UserUpload';
 import Result from './pages/Result';
-import Landing from './pages/Landing';
+
 import Home from './pages/Home';
 import EnterPassword from './pages/EnterPassword';
 import History from './pages/History';
@@ -14,6 +14,9 @@ import History2 from './pages/History2'
 import VideoList from './pages/VideoList'
 import UserLoading2 from './pages/Userloading2';
 import Summary from './pages/Summary';
+import Detail_2 from './pages/Detail_2';
+import History3 from './pages/History3';
+import VideoListUser from './pages/VideoListUser';
 
 const AppRoutes = () => {
     //<Route path="/adminLoading" element={<AdminLoading />} />
@@ -31,6 +34,9 @@ const AppRoutes = () => {
             <Route path='/videolist' element={<VideoList/>} />
             <Route path='/userloading2' element={<UserLoading2/>} />
             <Route path='/summary' element={<Summary/>} />
+            <Route path='/detail2' element={<Detail_2/>} />
+            <Route path='/history3' element={<History3/>} />
+            <Route path='/videolistuser' element={<VideoListUser/>}/>
         </Routes>
     );
 };

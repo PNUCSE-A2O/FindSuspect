@@ -22,7 +22,7 @@ const UserUpload = () => {
             <Typography className="landing-text" variant="h4" style={{marginBottom: '20px', fontWeight: 'bold'}}>
                 Put Suspect's Image
             </Typography>
-            <FileUpload/>
+            <ImageUpload/>
         </Container>
         </>
     );
