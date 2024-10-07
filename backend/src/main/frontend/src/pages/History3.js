@@ -37,12 +37,14 @@ const History3 = () => {
     axios.delete(`/api/history/${id}`)
         .then(() => {
             alert(`history ${id}이(가) 성공적으로 삭제되었습니다.`);
+            // 삭제된 항목을 상태에서 제거
+            setHistoryData(prevHistoryData => prevHistoryData.filter(item => item.id !== id));
         })
         .catch(error => {
             console.error('히스토리 삭제 중 오류 발생', error);
             alert('히스토리 삭제에 실패했습니다.');
         });
-};
+  };
 
   return (
     <>
