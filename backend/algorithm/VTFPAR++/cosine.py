@@ -2,6 +2,7 @@ import os
 import json
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import shutil
 
 attr_words = [
     '짧은 상의',    # 1
@@ -93,6 +94,15 @@ def get_similarity(feature, new_attr_words, image_name):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
+    output_path = f"/data/FindSuspect/backend/src/main/resources/data/{image_name}"
+
+    # 폴더가 존재하면 삭제
+    if os.path.exists(output_path):
+        shutil.rmtree(output_path)
+
+    # 폴더 생성
+    os.makedirs(output_path)
+
     # features 폴더 내의 모든 JSON 파일에 대해 작업 수행
     for file_name in os.listdir(input_folder):
         if file_name.endswith('.json'):  # JSON 파일만 처리
@@ -116,6 +126,9 @@ def get_similarity(feature, new_attr_words, image_name):
             # 유사도 상위 5개의 속성 추출
             top_5_similarities = dict(sorted(result.items(), key=lambda item: item[1], reverse=True)[:5])
             detailed_result = {}
+
+            # 결과를 저장할 파일 경로 설정
+            output_file_path = os.path.join(output_path, file_name)
             for key, overall_similarity in top_5_similarities.items():
                 value = data[key]
                 feature_similarities = []
@@ -144,11 +157,6 @@ def get_similarity(feature, new_attr_words, image_name):
                     "attr_words": top_5_names
                 }
 
-            output_path = f"/data/FindSuspect/backend/src/main/resources/data/{image_name}"
-            if not os.path.exists(output_path):
-                os.makedirs(output_path)
-
-            # 결과를 key 이름으로 result 폴더에 저장
-            output_file_path = os.path.join(output_folder, f"/data/FindSuspect/backend/src/main/resources/data/{image_name}/{file_name}")
+            # 결과 저장
             with open(output_file_path, 'w') as out_file:
                 json.dump(detailed_result, out_file, indent=4)
