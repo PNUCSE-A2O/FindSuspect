@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class Util {
     public boolean checkCuda() {
@@ -80,7 +81,7 @@ public class Util {
         }
         return exitCode;
     }
-
+    /*
     public void copyFile(String src, String dest) throws IOException {
         try{
             Path sourcePath = Paths.get(src);
@@ -101,8 +102,8 @@ public class Util {
         }catch(IOException e){
             throw new BadRequestException("파일 복사 실패");
         }
-        
     }
+    */
     // public void init(){
     //     File data = new File("/data/FindSuspect/backend/src/main/resources/data");
     //     File image = new File("/data/FindSuspect/backend/src/main/frontend/public/image");

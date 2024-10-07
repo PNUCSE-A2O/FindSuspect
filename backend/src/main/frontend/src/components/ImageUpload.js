@@ -69,6 +69,10 @@ function ImageUpload() {
         navigate('/videolistuser'); 
     };
 
+    const goToHistory = () => {
+        navigate('/history3');
+    }
+
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -94,6 +98,16 @@ function ImageUpload() {
                 style={{ marginTop: '30px', marginLeft: '20px', textTransform: 'none', fontWeight: 'bold' }}
             >
                 영상 목록
+            </Button>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                sx={{ borderRadius: 5 }} 
+                size="large"
+                onClick={goToHistory} 
+                style={{ marginTop: '30px', marginLeft: '20px', textTransform: 'none', fontWeight: 'bold' }}
+            >
+                기록
             </Button>
         </>
     );

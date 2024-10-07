@@ -166,4 +166,8 @@ public class ImageService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteHistory(int historyId) {
+        historyRepository.deleteById(historyId);
+    }
+
 }

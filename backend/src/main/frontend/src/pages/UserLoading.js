@@ -25,7 +25,7 @@ const UserLoading = () => {
                 console.log(paths);
                 if(paths.length > 0){
                     setLatestImagePath(paths);
-                    finishLoading();
+                    //finishLoading();
                 } else {
                     alert('이미지 경로를 가져오는데 실패했습니다.');
                 }

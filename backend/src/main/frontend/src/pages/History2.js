@@ -5,23 +5,21 @@ import UserHeaderAppBar from '../components/UserHeaderAppBar';
 
 const History2 = () => {
   const [historyData, setHistoryData] = useState([]);
-  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 (0부터 시작)
-  
-  // 히스토리 데이터를 API에서 가져와 상태로 설정
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+
   useEffect(() => {
     axios.get(`/api/history?page=${currentPage}`)
       .then(response => {
         console.log(response.data);
-        setHistoryData(response.data.histories); // histories 배열만 상태로 설정
-        setTotalPages(response.data.totalPages); // 총 페이지 수 설정
+        setHistoryData(response.data.histories);
+        setTotalPages(response.data.totalPages);
       })
       .catch(error => {
         console.error('히스토리 데이터를 가져오는 중 오류 발생:', error);
       });
-  }, [currentPage]); // currentPage가 변경될 때마다 데이터 가져옴
+  }, [currentPage]);
 
-  // 페이지 변경 핸들러
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -52,21 +50,21 @@ const History2 = () => {
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} style={{ paddingLeft: '50px', paddingTop: '30px' }}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', textAlign: 'left', marginBottom: '5px' }}>
-                        <strong>Video Name:</strong>
+                        <strong>비디오 이름:</strong>
                       </Typography>
                       <Typography variant="body1" style={{ marginBottom: '10px', color: 'black', textAlign: 'left', paddingLeft: '10px' }}>
                         {item.video_name}
                       </Typography>
 
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', textAlign: 'left', marginBottom: '5px' }}>
-                        <strong>Time:</strong>
+                        <strong>시간:</strong>
                       </Typography>
                       <Typography variant="body1" style={{ marginBottom: '10px', color: 'black', textAlign: 'left', paddingLeft: '10px' }}>
                         {item.time}
                       </Typography>
 
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', textAlign: 'left', marginBottom: '5px' }}>
-                        <strong>Similarity:</strong>
+                        <strong>유사도:</strong>
                       </Typography>
                       <Typography variant="body1" style={{ marginBottom: '10px', color: 'black', textAlign: 'left', paddingLeft: '10px' }}>
                         {item.similarity.toFixed(2)}%
@@ -75,34 +73,34 @@ const History2 = () => {
 
                     <Grid item xs={12} md={6}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginBottom: '10px', textAlign: 'left' }}>
-                        <strong>Images:</strong>
+                        <strong>이미지:</strong>
                       </Typography>
                       <Box display="flex" justifyContent="space-around" alignItems="center">
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                          <Typography variant="caption" align="center" style={{ color: 'black' }}>Input Image</Typography>
+                          <img src={item.imageName} alt="원본" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
+                          <Typography variant="caption" align="center" style={{ color: 'black' }}>입력 이미지</Typography>
                         </Paper>
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.imageCropped} alt="Cropped" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                          <Typography variant="caption" align="center" style={{ color: 'black' }}>Cropped</Typography>
+                          <img src={item.imageRectangle} alt="크롭된 이미지" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
+                          <Typography variant="caption" align="center" style={{ color: 'black' }}>이미지 내 탐지된 객체</Typography>
                         </Paper>
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1' }}>
-                          <img src={rectangleImagePath} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                          <Typography variant="caption" align="center" style={{ color: 'black' }}>Rectangle</Typography>
+                          <img src={rectangleImagePath} alt="사각형 이미지" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
+                          <Typography variant="caption" align="center" style={{ color: 'black' }}>영상 내 탐지된 객체</Typography>
                         </Paper>
                       </Box>
                     </Grid>
 
                     <Grid item xs={12}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginTop: '20px', textAlign: 'center' }}>
-                        <strong>Attributes & Features:</strong>
+                        <strong>속성 및 특징:</strong>
                       </Typography>
                       <table style={{ width: '100%', border: '1px solid #bdc3c7', marginTop: '10px', textAlign: 'center', color: 'black' }}>
                         <thead style={{ backgroundColor: '#ecf0f1', color: 'black' }}>
                           <tr>
-                            <th style={{ padding: '10px', textAlign: 'left' }}>Attribute</th>
-                            <th style={{ padding: '10px', textAlign: 'left' }}>Original Top 5</th>
-                            <th style={{ padding: '10px', textAlign: 'left' }}>File Top 5</th>
+                            <th style={{ padding: '10px', textAlign: 'left' }}>속성</th>
+                            <th style={{ padding: '10px', textAlign: 'left' }}>원본 상위 5개</th>
+                            <th style={{ padding: '10px', textAlign: 'left' }}>파일 상위 5개</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -122,7 +120,7 @@ const History2 = () => {
             );
           })
         ) : (
-          <Typography align="center" style={{ color: 'black', marginTop: '50px' }}>No history available.</Typography>
+          <Typography align="center" style={{ color: 'black', marginTop: '50px' }}>히스토리가 없습니다.</Typography>
         )}
 
         <Box display="flex" justifyContent="center" alignItems="center" marginTop="20px">

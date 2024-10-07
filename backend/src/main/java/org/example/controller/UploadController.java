@@ -85,4 +85,10 @@ public class UploadController {
         return new ResponseEntity<>("",HttpStatus.OK);
 
     }
+
+    @DeleteMapping("/api/history/{historyId}")
+    public ResponseEntity<?> deleteHistory(@PathVariable("historyId") int historyId){
+        imageService.deleteHistory(historyId);
+        return new ResponseEntity<>("",HttpStatus.OK);
+    }
 }

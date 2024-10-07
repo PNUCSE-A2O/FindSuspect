@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public record HistoryDTO(
+        int id,
         String imageName,
         String imageCropped,
         String imageRectangle,

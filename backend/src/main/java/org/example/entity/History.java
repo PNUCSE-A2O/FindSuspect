@@ -64,7 +64,7 @@ public class History {
 
 
     public HistoryDTO toDTO(){
-        return new HistoryDTO(imageName, imageCropped, imageRectangle,
+        return new HistoryDTO(id, imageName, imageCropped, imageRectangle,
                  videoImage, videoName, similarity,
                  original_top5, file_top5, attr_words, time);
     }

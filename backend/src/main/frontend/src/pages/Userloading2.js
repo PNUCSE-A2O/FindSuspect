@@ -14,10 +14,10 @@ const UserLoading2 = () => {
                     const response = await axios.get('/api/result');
                     console.log('결과 데이터:', response.data);
 
-                    // 데이터가 비어 있지 않으면 history로 이동하고, 타이머 종료
+                    // 데이터가 비어 있지 않으면 summary로 이동하고, 타이머 종료
                     if (response.status === 200 && response.data && Object.keys(response.data).length > 0) {
                         clearInterval(interval);  
-                        navigate('/summary');     // history 페이지로 이동
+                        navigate('/summary');     // summary 페이지로 이동
                     } else {
                         console.log('결과가 아직 준비되지 않음');
                     }
@@ -26,7 +26,7 @@ const UserLoading2 = () => {
                     clearInterval(interval);  // 오류가 발생하면 타이머 중지
                     alert('API 요청 중 오류 발생');
                 }
-            }, 2000);  // 3초마다 API를 요청
+            }, 2000);  // 2초마다 API를 요청
         };
 
         fetchData();
