@@ -11,10 +11,28 @@ function ImageUpload() {
     const [isDisabled, setIsDisabled] = useState(true);
     const [file2send, setFile2send] = useState([]);
     const [circleLoading, setCircleLoading] = useState(false);
+    const [videoArray, setVideoArray] = useState([]);
+
     const navigate = useNavigate();
     let formData = new FormData();
 
+    const getVideoArray = () => {
+        axios.get('/api/get/video')
+            .then(response => {
+                const paths = response.data;
+                setVideoArray(paths);
+            })
+            .catch(error => {
+                console.error('비디오 경로를 가져오는 중 오류 발생', error);
+            });
+    }
+
     const handleClick = () => {
+        getVideoArray();
+        if(videoArray.length <= 0){
+            alert("현재 저장된 비디오가 없습니다.");
+            return;
+        }
         setLoading(true);
         setCircleLoading(true);
         setIsDisabled(true);

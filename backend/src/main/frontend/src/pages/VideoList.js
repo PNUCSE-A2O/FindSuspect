@@ -11,11 +11,7 @@ const VideoList = () => {
         axios.get('/api/get/video')
             .then(response => {
                 const paths = response.data;
-                if (paths.length > 0) {
-                    setVideoPaths(paths);
-                } else {
-                    alert('비디오 경로를 가져오는데 실패했습니다.');
-                }
+                setVideoPaths(paths);
             })
             .catch(error => {
                 console.error('비디오 경로를 가져오는 중 오류 발생', error);
