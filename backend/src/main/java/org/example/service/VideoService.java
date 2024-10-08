@@ -28,6 +28,8 @@ public class VideoService {
     private final Util util;
 
     private void saveVideo(String dir, MultipartFile file) {
+        util.checkCuda();
+
         // 원본 파일 이름
         String fileName = file.getOriginalFilename();
 
@@ -69,7 +71,7 @@ public class VideoService {
         Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VTFPAR++/features/",name+".json"));
         //System.out.println(path2.toString());
         historyRepository.deleteByVideo_name(name);
-        
+
         try {
             //path1 폴더와 그 안의 파일/폴더 삭제
             File folder = path1.toFile();

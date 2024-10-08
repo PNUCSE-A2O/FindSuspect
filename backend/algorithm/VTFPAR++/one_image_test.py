@@ -133,21 +133,7 @@ def main():
     result=[round(value, 4) for value in result]
     
     top_5 = cosine.get_similarity(result, new_attr_words, image_name)
-    #save_json("/data/FindSuspect/backend/src/main/resources/data/result.json", top_5)
 
 
 if __name__ == '__main__':
     main()
-
-    # result_bool = []
-    # for i in result:
-    #     if(i > 0.6):
-    #         result_bool.append(True)
-    #     else:
-    #         result_bool.append(False)
-    # # print(result_bool)
-    # attr_result = []
-    # for idx, value in enumerate(result_bool):
-    #     if(value):
-    #         attr_result.append(attr_words[idx])
-    # print(attr_result)

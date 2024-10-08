@@ -12,7 +12,7 @@ model = YOLO('yolov9m_35_32.pt', verbose=False)
 
 # 비디오 파일이 있는 폴더 경로
 image_name = sys.argv[1]
-image_folder = f'/data/FindSuspect/backend/src/main/frontend/public/image/{image_name}'
+image_folder = f'/data/FindSuspect/backend/src/main/frontend/public/image'
 image_path = os.path.join(image_folder, image_name)
 output_folder = 'image_output'
 

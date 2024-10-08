@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.example.dto.HistoryDTO;
 import org.example.dto.ResultDTO;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,18 +12,22 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
+@Getter
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     String imageName;
-    String imageCropped;
-    String imageRectangle;
+    String imageCrop;
+    String imageRect;
     @CreatedDate
     LocalDateTime createdAt;
 
     String videoImage;
+    String videoCrop;
+    String videoRect;
+
     String videoName;
     double similarity;
     @ElementCollection
@@ -33,11 +38,15 @@ public class History {
     List<String> attr_words;
     String time;
 
-    public History(String imageName, String imageCropped, String imageRectangle, String video_image, ResultDTO result) {
+    public History(String imageName, String video_image, ResultDTO result) {
         this.imageName = imageName;
-        this.imageCropped = imageCropped;
-        this.imageRectangle = imageRectangle;
+        this.imageCrop = imageName + "_cropped.jpg";
+        this.imageRect = imageName + "_rectangle.jpg";
+
         this.videoImage = video_image;
+        this.videoCrop = video_image + "_cropped.jpg";
+        this.videoRect = video_image + "_rectangle.jpg";
+
         this.videoName = result.getVideoName();
         this.similarity = result.getSimilarity();
         this.original_top5 = result.getOriginalTop5();
@@ -50,22 +59,9 @@ public class History {
 
     }
 
-    public String getImageName() {
-        return imageName;
-    }
-
-    public String getImageCropped() {
-        return imageCropped;
-    }
-
-    public String getImageRectangle() {
-        return imageRectangle;
-    }
-
-
     public HistoryDTO toDTO(){
-        return new HistoryDTO(id, imageName, imageCropped, imageRectangle,
-                 videoImage, videoName, similarity,
+        return new HistoryDTO(id, imageName, imageCrop,imageRect,
+                 videoImage, videoCrop, videoRect, videoName, similarity,
                  original_top5, file_top5, attr_words, time);
     }
 }

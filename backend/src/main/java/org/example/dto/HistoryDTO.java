@@ -11,8 +11,12 @@ public record HistoryDTO(
         String imageName,
         String imageCropped,
         String imageRectangle,
-        String video_image,
-        String video_name,
+
+        String videoImage,
+        String videoCrop,
+        String videoRect,
+
+        String videoName,
         double similarity,
         List<Double> original_top5,
         List<Double> file_top5,

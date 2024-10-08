@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.example.dto.HistoryDTO;
 import org.example.dto.PageHistory;
 import org.example.dto.ResultDTO;
@@ -33,21 +34,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
-    private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image/";
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image";
+    private final ObjectMapper objectMapper;
+    private final String dataPath = "/data/FindSuspect/backend/src/main/resources/data";
     private List<Map.Entry<String, ResultDTO>> result;
+    private final HistoryRepository historyRepository;
+    private final Util util;
 
-    @Autowired
-    HistoryRepository historyRepository;
-    private Util util = new Util();
-    private final int FPS = 30;
     private String finalImage;
 
-    private void saveImage(String dir, MultipartFile file) {
+    private void saveImage(MultipartFile file) {
         String fileName = file.getOriginalFilename();
 
-        File dirPath = new File(dir+fileName);
+        File dirPath = new File(UPLOAD_DIR_IMAGE);
         if (dirPath.exists()) {
             util.deleteFolder(dirPath);  // 폴더와 그 안의 모든 내용을 삭제
         }
@@ -55,7 +56,7 @@ public class ImageService {
         if (!dirPath.mkdirs())
             throw new BadRequestException("folder make fail");
 
-        Path targetPath = Paths.get(dirPath.toString(), fileName);
+        Path targetPath = Paths.get(UPLOAD_DIR_IMAGE, fileName);
 
         // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(targetPath)) {
@@ -64,47 +65,30 @@ public class ImageService {
             throw new BadRequestException("image save fail");
         }
     }
-    
+
     public void uploadImage(MultipartFile imageFile) {
-        saveImage(UPLOAD_DIR_IMAGE, imageFile);
+        saveImage(imageFile);
         imagePython(imageFile.getOriginalFilename());
     }
 
     public List<Map.Entry<String, ResultDTO>> getResult(){
         return this.result;
     }
-    
+
     private void imagePython(String fileName){
-        if (!util.checkCuda()) throw new BadRequestException("cuda not use");
-        String command = "python algorithm/image_upload.py " + fileName; // Windows 사용 시 "python script.py"로 변경
+        util.checkCuda();
+        String command = "python algorithm/image_upload.py " + fileName;
 
         int exitCode = util.newProcess(command);
-        if(exitCode != 0) throw new BadRequestException("image feature error");
+        if(exitCode != 0)
+            throw new BadRequestException("image feature error");
         finalImage = fileName;
         readResultJson(fileName);
-        //saveHistory(fileName);
-    }
-
-     public void saveHistory(String imageName) {
-        String originalFile = "image/"+ finalImage +"/"+finalImage;
-        String croppedFile = originalFile +"_cropped.jpg";
-        String rectangleFile = originalFile +"_rectangle.jpg";
-        ResultDTO resultDTO = null;
-        if(this.result == null)
-            throw new BadRequestException("result is null");
-        for(Map.Entry<String,ResultDTO> mp : result){
-            if(mp.getKey().equals(imageName)){
-                resultDTO= mp.getValue();
-            }
-        }
-        if(resultDTO == null) throw new BadRequestException("imageName not found");
-        History history = new History(originalFile,croppedFile,rectangleFile,imageName,resultDTO);
-        historyRepository.save(history);
     }
 
      private void readResultJson(String fileName) {
         //result.json읽어 파싱 후 List로
-        String dirPath = "/data/FindSuspect/backend/src/main/resources/data/"+fileName + "_cropped.jpg";
+        String dirPath = dataPath + "/" +fileName + "_cropped.jpg";
         File dir = new File(dirPath);
         File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 
@@ -113,7 +97,7 @@ public class ImageService {
         assert jsonFiles != null;
         for (File jsonFile : jsonFiles) {
             // JSON 파일을 Map<String, Object>로 파싱
-            Map<String, Object> fileData = null;
+            Map<String, Object> fileData ;
             try {
                 fileData = objectMapper.readValue(jsonFile, new TypeReference<Map<String, Object>>() {});
             } catch (IOException e) {
@@ -136,7 +120,7 @@ public class ImageService {
             Matcher matcher = pattern.matcher(key);
             if (matcher.find()) {
                 int time = Integer.parseInt(matcher.group(1));
-                int minute = time / (60);
+                int minute = time / 60;
                 int second = (time) % 60;
                 String strTime = String.format("%d:%02d", minute, second);
                 dto.setTime(strTime);
@@ -148,14 +132,8 @@ public class ImageService {
 
     }
 
-    public PageHistory getHistory(Pageable pageable) {
-        Page<History> histories = historyRepository.findAll(pageable);
-        List<HistoryDTO> his = histories.getContent().stream().map(History::toDTO).toList();
-        return new PageHistory(his,histories.getTotalElements(), histories.getTotalPages());
-    }
-    
     public String getPath(){
-        return "image/" + finalImage +"/" + finalImage;
+        return "image/" + finalImage ;
     }
 
     public List<Entry<String, ResultDTO>> getResultByVideoName() {
@@ -166,8 +144,28 @@ public class ImageService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteHistory(int historyId) {
-        historyRepository.deleteById(historyId);
+    public void saveHistory(String videoImage) {
+        if(result == null)
+            throw new BadRequestException("result is null");
+
+        String imageName = "image/"+ finalImage ;
+        ResultDTO resultDTO = null;
+
+        for(Map.Entry<String,ResultDTO> mp : result){
+            if(mp.getKey().equals(imageName)){
+                resultDTO = mp.getValue();
+            }
+        }
+
+        if(resultDTO == null) throw new BadRequestException("imageName not found");
+
+        copyFile(imageName, videoImage);
+        History history = new History(imageName,videoImage,resultDTO);
+        historyRepository.save(history);
     }
 
+    private void copyFile(String imageName, String videoImage) {
+
+
+    }
 }

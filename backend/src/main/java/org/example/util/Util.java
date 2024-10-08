@@ -1,5 +1,10 @@
 package org.example.util;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import org.example.exception.BadRequestException;
 
 import java.io.BufferedReader;
@@ -34,12 +39,12 @@ public class Util {
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                throw new BadRequestException("CUDA 확인 중 오류 발생");
+                throw new BadRequestException("CUDA not usable");
             }
 
             return cudaAvailable;
         } catch (Exception e) {
-            throw new BadRequestException("python 실행 실패");
+            throw new BadRequestException("python execution failed");
         }
     }
 
@@ -81,8 +86,8 @@ public class Util {
         }
         return exitCode;
     }
-    /*
-    public void copyFile(String src, String dest) throws IOException {
+
+    public void copyFile(String src, String dest) {
         try{
             Path sourcePath = Paths.get(src);
             Path destinationPath = Paths.get(dest);
@@ -92,9 +97,8 @@ public class Util {
                 destinationPath = destinationPath.resolve(sourcePath.getFileName());
             }
             
-            if (Files.exists(potentialDestFile)) {
-                System.out.println("파일이 이미 존재합니다: " + potentialDestFile);
-                return; // 파일이 이미 존재하면 함수 종료
+            if (Files.exists(destinationPath)) {
+                throw new BadRequestException("파일이 이미 존재합니다: " + destinationPath);// 파일이 이미 존재하면 함수 종료
             }
 
             // 파일 복사
@@ -103,17 +107,5 @@ public class Util {
             throw new BadRequestException("파일 복사 실패");
         }
     }
-    */
-    // public void init(){
-    //     File data = new File("/data/FindSuspect/backend/src/main/resources/data");
-    //     File image = new File("/data/FindSuspect/backend/src/main/frontend/public/image");
 
-    //     deleteFolder(data);
-    //     deleteFolder(image);
-
-    //     if (!data.mkdirs())
-    //         throw new BadRequestException("folder make fail");
-    //     if (!image.mkdirs())
-    //         throw new BadRequestException("folder make fail");
-    // }
 }
