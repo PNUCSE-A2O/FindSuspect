@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MyDropzone from './dropzone';
 import { Button, CircularProgress } from '@mui/material';
@@ -20,6 +20,7 @@ function ImageUpload() {
         axios.get('/api/get/video')
             .then(response => {
                 const paths = response.data;
+                console.log(paths);
                 setVideoArray(paths);
             })
             .catch(error => {
@@ -27,8 +28,13 @@ function ImageUpload() {
             });
     }
 
+    useEffect(() => {
+        getVideoArray();
+    }, []);
+
     const handleClick = () => {
         getVideoArray();
+        console.log(videoArray);
         if(videoArray.length <= 0){
             alert("현재 저장된 비디오가 없습니다.");
             return;
