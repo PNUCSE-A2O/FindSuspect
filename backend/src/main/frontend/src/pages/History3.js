@@ -56,14 +56,16 @@ const History3 = () => {
 
         {historyData.length > 0 ? (
           historyData.map((item, index) => {
-            let rectangle = item.video_image; 
-            if (rectangle.endsWith('_cropped.jpg')) {
-              rectangle = rectangle.replace('_cropped.jpg', '_rectangle.jpg');
-            } else if (rectangle.endsWith('.jpg')) {
-              rectangle = rectangle.replace('.jpg', '_rectangle.jpg');
+            let rectangle = item.videoImage; 
+            if (rectangle && rectangle.endsWith('_cropped.jpg')) {
+            rectangle = rectangle.replace('_cropped.jpg', '_rectangle.jpg');
+            } else if (rectangle && rectangle.endsWith('.jpg')) {
+            rectangle = rectangle.replace('.jpg', '_rectangle.jpg');
             }
-            const rectangleImagePath = `video/${item.video_name}/${rectangle}`; 
-
+            
+            const rectangleImagePath = `video/${item.videoName}/${rectangle}`; 
+            console.log(item.videoCrop);
+            console.log(item.videoRect);
             const doughnutChartData = {
               labels: ['Similarity', 'Remaining'],
               datasets: [
@@ -101,7 +103,7 @@ const History3 = () => {
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Input Image</Typography>
                         </Paper>
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.imageRectangle} alt="Detected" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
+                          <img src={item.videoCrop} alt="Detected" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>Detected Object</Typography>
                         </Paper>
                       </Box>
@@ -133,7 +135,7 @@ const History3 = () => {
                     {/* Right side: One Image */}
                     <Grid item xs={12} md={3}>
                       <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1' }}>
-                        <img src={rectangleImagePath} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
+                        <img src={item.videoRect} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
                         <Typography variant="caption" align="center" style={{ color: 'black' }}>Rectangle Image</Typography>
                       </Paper>
                     </Grid>
@@ -166,13 +168,13 @@ const History3 = () => {
                                 style={{ width: '100%', height: '100%' }} 
                                 controls 
                               >
-                                <source src={`video/${item.video_name}/${item.video_name}`} type="video/mp4" />
+                                <source src={`video/${item.videoName}/${item.videoName}`} type="video/mp4" />
                                 Your browser does not support the video tag.
                               </video>
                             </Grid>
                             <Grid item xs={6}>
                               <Typography sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
-                                <strong>Video: {item.video_name || 'N/A'}</strong>
+                                <strong>Video: {item.videoName || 'N/A'}</strong>
                               </Typography>
                               <Typography><strong>Detection Time: {item.time || 'N/A'}</strong></Typography>
                             </Grid>

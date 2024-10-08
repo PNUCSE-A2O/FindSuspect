@@ -70,7 +70,7 @@ public class VideoService {
         Path path1 = (Paths.get(UPLOAD_DIR_VIDEO+name));
         Path path2 = (Paths.get("/data/FindSuspect/backend/algorithm/VTFPAR++/features/",name+".json"));
         //System.out.println(path2.toString());
-        historyRepository.deleteByVideo_name(name);
+        //historyRepository.deleteByVideo_name(name);
 
         try {
             //path1 폴더와 그 안의 파일/폴더 삭제

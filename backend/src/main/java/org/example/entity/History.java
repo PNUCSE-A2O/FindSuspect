@@ -43,9 +43,10 @@ public class History {
         this.imageCrop = "db/"+imageName + "_cropped.jpg";
         this.imageRect = "db/"+imageName + "_rectangle.jpg";
 
-        this.videoImage = "db/"+video_image;
-        this.videoCrop = "db/"+video_image + "_cropped.jpg";
-        this.videoRect = "db/"+video_image + "_rectangle.jpg";
+        int index = video_image.indexOf("_cropped.jpg");
+        this.videoImage = "db/"+video_image.substring(0,index) + ".jpg";
+        this.videoCrop = "db/"+video_image;
+        this.videoRect = "db/"+video_image.substring(0,index) + "_rectangle.jpg";
 
         this.videoName = result.getVideoName();
         this.similarity = result.getSimilarity();
@@ -61,7 +62,7 @@ public class History {
 
     public HistoryDTO toDTO(){
         return new HistoryDTO(id, imageName, imageCrop,imageRect,
-                 videoImage, videoCrop, videoRect, videoName, similarity,
+                 /*videoImage,*/ videoCrop, videoRect, videoName, similarity,
                  original_top5, file_top5, attr_words, time);
     }
 }

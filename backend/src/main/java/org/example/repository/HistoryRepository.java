@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Integer> {
@@ -17,4 +18,7 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
     void deleteByVideo_name(String video_name);
 
     Page<History> findAll(Pageable pageable);
+
+    @Query("SELECT h FROM History h WHERE h.imageName LIKE %:searchString% OR h.videoImage LIKE %:searchString%")
+    List<History> findDuplicateName(String searchString);
 }

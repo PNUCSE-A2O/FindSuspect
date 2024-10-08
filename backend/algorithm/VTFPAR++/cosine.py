@@ -94,7 +94,7 @@ def get_similarity(feature, new_attr_words, image_name):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
-    output_path = f"/data/FindSuspect/backend/src/main/resources/data/{image_name}"
+    output_path = f"/data/FindSuspect/backend/src/main/resources/data"
 
     # 폴더가 존재하면 삭제
     if os.path.exists(output_path):

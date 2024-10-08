@@ -32,9 +32,9 @@ public class HistoryController {
     }
 
     @PostMapping("/api/history")
-    public ResponseEntity<String> saveHistory(@RequestParam("image_name") String imageName){
-        imageService.saveHistory(imageName);
-        return new ResponseEntity<>("",HttpStatus.OK);
+    public ResponseEntity<?> saveHistory(@RequestParam("image_name") String imageName){
+        int id = imageService.saveHistory(imageName);
+        return new ResponseEntity<>(id,HttpStatus.OK);
     }
 
     @DeleteMapping("/api/history/{historyId}")

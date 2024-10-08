@@ -72,6 +72,11 @@ public class ImageService {
     }
 
     public void uploadImage(MultipartFile imageFile) {
+        File dataFolder = new File(dataPath);
+        util.deleteFolder(dataFolder);
+        
+        if (!dataFolder.mkdirs())
+            throw new BadRequestException("folder make fail");
         saveImage(imageFile);
         imagePython(imageFile.getOriginalFilename());
     }
@@ -93,8 +98,7 @@ public class ImageService {
 
      private void readResultJson(String fileName) {
         //result.json읽어 파싱 후 List로
-        String dirPath = dataPath + "/" +fileName + "_cropped.jpg";
-        File dir = new File(dirPath);
+        File dir = new File(dataPath);
         File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
 
         Map<String, ResultDTO> resultMap = new HashMap<>();
@@ -149,7 +153,7 @@ public class ImageService {
                 .collect(Collectors.toList());
     }
 
-    public void saveHistory(String videoImage) {
+    public int saveHistory(String videoImage) {
         if(result == null)
             throw new BadRequestException("result is null");
 
@@ -157,7 +161,7 @@ public class ImageService {
         ResultDTO resultDTO = null;
 
         for(Map.Entry<String,ResultDTO> mp : result){
-            if(mp.getKey().equals(finalImage)){
+            if(mp.getKey().equals(videoImage)){
                 resultDTO = mp.getValue();
             }
         }
@@ -165,9 +169,10 @@ public class ImageService {
         if(resultDTO == null) throw new BadRequestException("imageName not found");
 
         copyAllImages(UPLOAD_DIR_IMAGE, DB_DIR);
-        copyAllImages(UPLOAD_DIR_VIDEO+"/"+videoImage, DB_DIR);
-        History history = new History(finalImage,videoImage,resultDTO);
-        historyRepository.save(history);
+        copyAllImagesWithKeyword(UPLOAD_DIR_VIDEO+"/"+resultDTO.getVideoName(), DB_DIR, videoImage);
+        History history = new History(finalImage, videoImage, resultDTO);
+        history = historyRepository.save(history);
+        return history.getId();
     }
 
     private void copyAllImages(String srcDir, String destDir) {
@@ -198,6 +203,44 @@ public class ImageService {
                         }
                     });
         } catch (IOException e) {
+            e.printStackTrace();
+            //throw new BadRequestException("파일 복사 실패");
+        }
+    }
+    
+    private void copyAllImagesWithKeyword(String srcDir, String destDir, String videoName) {
+        int index = videoName.indexOf("_cropped.jpg");
+        final String keyword = videoName.substring(0,index);
+        System.out.println(keyword);
+        try {
+            Path sourceDirPath = Paths.get(srcDir);
+            Path destinationDirPath = Paths.get(destDir);
+
+            // 목적지 디렉토리가 없으면 생성
+            if (Files.notExists(destinationDirPath)) {
+                Files.createDirectories(destinationDirPath);
+            }
+
+            // srcDir 내의 모든 파일을 순회
+            Files.walk(sourceDirPath)
+                    .filter(Files::isRegularFile) // 파일만 선택
+                    .filter(this::isImageFile)    // 이미지 파일만 선택
+                    .filter(sourcePath -> sourcePath.toString().contains(keyword))
+                    .forEach(sourcePath -> {
+                        try {
+                            // 목적지 경로를 생성
+                            Path destinationPath = destinationDirPath.resolve(sourceDirPath.relativize(sourcePath));
+                            // 파일이 이미 존재하는지 확인
+                            if (!Files.exists(destinationPath)) {
+                                // 파일 복사
+                                Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        } catch (IOException e) {
+                            throw new BadRequestException("파일 복사 실패: " + sourcePath);
+                        }
+                    });
+        } catch (IOException e) {
+            //e.printStackTrace();
             throw new BadRequestException("파일 복사 실패");
         }
     }

@@ -12,7 +12,7 @@ public record HistoryDTO(
         String imageCropped,
         String imageRectangle,
 
-        String videoImage,
+        //String videoImage,
         String videoCrop,
         String videoRect,
 
