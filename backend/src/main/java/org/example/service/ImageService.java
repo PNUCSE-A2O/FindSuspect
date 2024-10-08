@@ -2,6 +2,8 @@ package org.example.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -37,7 +39,10 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class ImageService {
     private final String UPLOAD_DIR_IMAGE = "/data/FindSuspect/backend/src/main/frontend/public/image";
+    private final String UPLOAD_DIR_VIDEO = "/data/FindSuspect/backend/src/main/frontend/public/video";
+    private final String DB_DIR = "/data/FindSuspect/backend/src/main/frontend/public/db";
     private final ObjectMapper objectMapper;
+    private final List<String> IMAGE_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png");
     private final String dataPath = "/data/FindSuspect/backend/src/main/resources/data";
     private List<Map.Entry<String, ResultDTO>> result;
     private final HistoryRepository historyRepository;
@@ -148,24 +153,58 @@ public class ImageService {
         if(result == null)
             throw new BadRequestException("result is null");
 
-        String imageName = "image/"+ finalImage ;
+
         ResultDTO resultDTO = null;
 
         for(Map.Entry<String,ResultDTO> mp : result){
-            if(mp.getKey().equals(imageName)){
+            if(mp.getKey().equals(finalImage)){
                 resultDTO = mp.getValue();
             }
         }
 
         if(resultDTO == null) throw new BadRequestException("imageName not found");
 
-        copyFile(imageName, videoImage);
-        History history = new History(imageName,videoImage,resultDTO);
+        copyAllImages(UPLOAD_DIR_IMAGE, DB_DIR);
+        copyAllImages(UPLOAD_DIR_VIDEO+"/"+videoImage, DB_DIR);
+        History history = new History(finalImage,videoImage,resultDTO);
         historyRepository.save(history);
     }
 
-    private void copyFile(String imageName, String videoImage) {
+    private void copyAllImages(String srcDir, String destDir) {
+        try {
+            Path sourceDirPath = Paths.get(srcDir);
+            Path destinationDirPath = Paths.get(destDir);
 
+            // 목적지 디렉토리가 없으면 생성
+            if (Files.notExists(destinationDirPath)) {
+                Files.createDirectories(destinationDirPath);
+            }
 
+            // srcDir 내의 모든 파일을 순회
+            Files.walk(sourceDirPath)
+                    .filter(Files::isRegularFile) // 파일만 선택
+                    .filter(this::isImageFile)    // 이미지 파일만 선택
+                    .forEach(sourcePath -> {
+                        try {
+                            // 목적지 경로를 생성
+                            Path destinationPath = destinationDirPath.resolve(sourceDirPath.relativize(sourcePath));
+                            // 파일이 이미 존재하는지 확인
+                            if (!Files.exists(destinationPath)) {
+                                // 파일 복사
+                                Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        } catch (IOException e) {
+                            throw new BadRequestException("파일 복사 실패: " + sourcePath);
+                        }
+                    });
+        } catch (IOException e) {
+            throw new BadRequestException("파일 복사 실패");
+        }
+    }
+
+    // 이미지 파일인지 확인하는 메서드
+    private boolean isImageFile(Path filePath) {
+        String fileName = filePath.getFileName().toString().toLowerCase();
+        return IMAGE_EXTENSIONS.stream().anyMatch(fileName::endsWith);
     }
 }

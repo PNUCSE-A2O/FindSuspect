@@ -39,13 +39,13 @@ public class History {
     String time;
 
     public History(String imageName, String video_image, ResultDTO result) {
-        this.imageName = imageName;
-        this.imageCrop = imageName + "_cropped.jpg";
-        this.imageRect = imageName + "_rectangle.jpg";
+        this.imageName = "db/"+imageName;
+        this.imageCrop = "db/"+imageName + "_cropped.jpg";
+        this.imageRect = "db/"+imageName + "_rectangle.jpg";
 
-        this.videoImage = video_image;
-        this.videoCrop = video_image + "_cropped.jpg";
-        this.videoRect = video_image + "_rectangle.jpg";
+        this.videoImage = "db/"+video_image;
+        this.videoCrop = "db/"+video_image + "_cropped.jpg";
+        this.videoRect = "db/"+video_image + "_rectangle.jpg";
 
         this.videoName = result.getVideoName();
         this.similarity = result.getSimilarity();
