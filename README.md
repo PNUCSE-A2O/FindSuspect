@@ -1,7 +1,7 @@
 # FindSuspect
 <br>
 
-- 2024 후기 졸업과제 A2O 팀
+- 2024 전기 졸업과제 A2O 팀
 
 - 이미지기반 객체(용의자) 검색 시스템 개발
 
@@ -47,11 +47,7 @@
 
 ## 프로젝트 개발 결과물
 
-실제 배포된 프로젝트는 [대충 링크...] 에서 확인 가능 합니다.
-
-### 주요 기능 및 화면
-
-[사진 추가 예정]
+실제 배포된 프로젝트는 [FindSuspect](https://findsuspect.modelx.me/) 에서 확인 가능 합니다.
 
 ### 아키텍처 및 데이터 흐름
 
@@ -66,33 +62,34 @@
 ### Admin 기준
 1. 첫 화면에서 Image Upload 버튼을 클릭합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/landing.png">
 
 2. 톱니바퀴 모양의 설정 버튼을 누르고 Admin 모드에 진입합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/setting.png">
 
 3. 미리 설정된 비밀번호를 입력합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/admin_mode.png">
 
 4. 확인 하고자 하는 CCTV 영상을 업로드 하거나, 이미 업로드 된 영상을 삭제 가능합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/video_upload.png">
 
 ### User 기준
 1. 첫 화면에서 Image Upload 버튼을 클릭합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/landing.png">
 
 2. 확인 하고자 하는 용의자 이미지를 업로드 합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/image_upload.png">
 
 3. 결과를 확인하고 싶은 영상의 결과 보기를 클릭합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/image_upload_result.png">
 
 4. 상위 5개의 유사도를 가진 영상의 시간대와 유사도를 확인 가능합니다. VIEW 버튼을 눌러 더욱 자세하게 확인 가능합니다.
 
-[사진 추가 예정]
+<img width="60%" src="./ReadmeAsset/image_video_result.png">
+<img width="60%" src="./ReadmeAsset/image_result.png">
