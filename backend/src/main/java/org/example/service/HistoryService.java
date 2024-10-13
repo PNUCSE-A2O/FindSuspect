@@ -34,7 +34,7 @@ public class HistoryService {
         historyRepository.delete(history);
         String image = history.getImageName().substring(3);
         //System.out.println("image: " + image);
-        String video = history.getVideoImage().substring(3);
+        String video = history.getVideoCrop().substring(3);
         //System.out.println("video: " + video);
         int index = video.indexOf("_cropped.jpg");
         video = video.substring(0,index);

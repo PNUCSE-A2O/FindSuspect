@@ -115,8 +115,8 @@ def get_similarity(feature, new_attr_words, image_name):
             # 딕셔너리 형태로 변환된 데이터 순회
             for key, value in data.items():
                 # 벡터화 및 가중치 적용
-                vec1 = np.array(feature) * attribute_weights
-                vec2 = np.array(value) * attribute_weights
+                vec1 = np.array(feature)  * attribute_weights
+                vec2 = np.array(value)  * attribute_weights
                 vec1 = vec1.reshape(1, -1)
                 vec2 = vec2.reshape(1, -1)
                 # 코사인 유사도 계산

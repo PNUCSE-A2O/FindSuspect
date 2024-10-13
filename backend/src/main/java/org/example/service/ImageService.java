@@ -82,6 +82,7 @@ public class ImageService {
     }
 
     public List<Map.Entry<String, ResultDTO>> getResult(){
+        util.checkCuda();
         return this.result;
     }
 

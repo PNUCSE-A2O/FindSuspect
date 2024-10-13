@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import org.example.exception.BadRequestException;
+import org.example.exception.ServerInternalException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,15 +36,13 @@ public class Util {
                 if (line.trim().equalsIgnoreCase("True")) {
                     cudaAvailable = true;
                 }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                throw new BadRequestException("CUDA not usable");
+                else{
+                    throw new ServerInternalException("CUDA not usable");
+                }
             }
 
             return cudaAvailable;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new BadRequestException("python execution failed");
         }
     }

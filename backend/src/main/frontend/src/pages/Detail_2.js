@@ -16,7 +16,17 @@ const Detail_2 = () => {
   const { data, imagePath, rectanglePath, key } = location.state || {}; 
   let rectangleImagepath = `${imagePath}_rectangle.jpg`;
   console.log(rectangleImagepath);
-  
+  console.log(key);
+  console.log(data);
+  let videoRectanglePath = key;
+  let videoCropPath = `video/${data.video_name}/${key}`;
+  if (videoRectanglePath && videoRectanglePath.endsWith('_cropped.jpg')){
+    videoRectanglePath = videoRectanglePath.replace('_cropped.jpg', '_rectangle.jpg');
+  } else if(videoRectanglePath.endsWith('.jpg')){
+    videoRectanglePath = videoRectanglePath.replace('.jpg','_rectangle.jpg');
+  }
+  videoRectanglePath = `video/${data.video_name}/${videoRectanglePath}`;
+  console.log(videoRectanglePath)
 
   const handleSave = async () => {
     try {
@@ -99,23 +109,31 @@ const Detail_2 = () => {
               
               {/* 첫 번째 이미지 */}
               <Grid item xs={12} md={1.5}>
-                <Paper variant="outlined" sx={{ p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <img 
-                    src={imagePath || 'default-placeholder.png'} 
-                    alt="Detected" 
-                    style={{ width: '100%', height: '150px', objectFit: 'contain' }} 
-                  />
-                </Paper>
-              </Grid>
-              <Grid item xs={12} md={1.5}>
-                <Paper variant="outlined" sx={{ p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <img 
-                    src={rectangleImagepath || 'default-placeholder.png'} 
-                    alt="Detected" 
-                    style={{ width: '100%', height: '150px', objectFit: 'contain' }} 
-                  />
-                </Paper>
-              </Grid>
+  <Paper 
+    variant="outlined" 
+    sx={{ 
+      p: 1, 
+      display: 'flex', 
+      flexDirection: 'column', // 이미지와 텍스트를 세로로 배치
+      justifyContent: 'center', 
+      alignItems: 'center' 
+    }}
+  >
+    <img 
+      src={imagePath || 'default-placeholder.png'} 
+      alt="Detected" 
+      style={{ width: '120%', height: '150px', objectFit: 'contain', marginBottom: '5px' }} 
+    />
+    <Typography 
+      variant="caption" 
+      align="center" 
+      sx={{ color: 'black', marginTop: '10px' }}
+    >
+      입력 이미지
+    </Typography>
+  </Paper>
+</Grid>
+
               
               {/* 테이블 */}
               <Grid item xs={12} md={6}>
@@ -141,16 +159,63 @@ const Detail_2 = () => {
               </Grid>
               
               {/* 두 번째 이미지 */}
-              <Grid item xs={12} md={3}>
-                <Paper variant="outlined" sx={{ p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <img 
-                    src={rectanglePath || 'default-placeholder.png'} 
-                    alt="Result" 
-                    style={{ width: '100%', height: '150px', objectFit: 'cover' }} 
-                  />
-                </Paper>
-              </Grid>
-
+              <Grid item xs={12} md={4}>
+  <Box display="flex" justifyContent="space-between" alignItems="center">
+    {/* 첫 번째 이미지 */}
+    <Paper 
+      variant="outlined" 
+      sx={{ 
+        p: 1, 
+        display: 'flex', 
+        flexDirection: 'column', // 이미지를 세로로 배치
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginRight: '5px', 
+        flexGrow: 1 
+      }}
+    >
+      <img 
+        src={videoRectanglePath || 'default-placeholder.png'} 
+        alt="Result" 
+        style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
+      />
+      <Typography 
+        variant="caption" 
+        align="center" 
+        sx={{ color: 'black', marginTop: '10px' }} 
+      >
+        발견된 이미지
+      </Typography>
+    </Paper>
+    
+    {/* 두 번째 이미지 */}
+    <Paper 
+      variant="outlined" 
+      sx={{ 
+        p: 1, 
+        display: 'flex', 
+        flexDirection: 'column', // 이미지를 세로로 배치
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginLeft: '5px', 
+        flexGrow: 1 
+      }}
+    >
+      <img 
+        src={videoCropPath || 'default-placeholder.png'} 
+        alt="Result" 
+        style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
+      />
+      <Typography 
+        variant="caption" 
+        align="center" 
+        sx={{ color: 'black', marginTop: '10px' }} 
+      >
+        크롭된 이미지
+      </Typography>
+    </Paper>
+  </Box>
+</Grid>
             </Grid>
           </CardContent>
         </Card>

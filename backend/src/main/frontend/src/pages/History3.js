@@ -36,7 +36,8 @@ const History3 = () => {
   const deleteHistory = (id) => {
     axios.delete(`/api/history/${id}`)
         .then(() => {
-            alert(`history ${id}이(가) 성공적으로 삭제되었습니다.`);
+            console.log(id);
+            alert(`history이(가) 성공적으로 삭제되었습니다.`);
             // 삭제된 항목을 상태에서 제거
             setHistoryData(prevHistoryData => prevHistoryData.filter(item => item.id !== id));
         })
@@ -96,15 +97,11 @@ const History3 = () => {
 
                   <Grid container spacing={2}>
                     {/* Left side: Two images */}
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={2}>
                       <Box display="flex" justifyContent="space-around" alignItems="center">
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                          <Typography variant="caption" align="center" style={{ color: 'black' }}>Input Image</Typography>
-                        </Paper>
-                        <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.videoCrop} alt="Detected" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                          <Typography variant="caption" align="center" style={{ color: 'black' }}>Detected Object</Typography>
+                          <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto'}} />
+                          <Typography variant="caption" align="center" style={{ color: 'black' }}>입력된 이미지</Typography>
                         </Paper>
                       </Box>
                     </Grid>
@@ -133,11 +130,50 @@ const History3 = () => {
                     </Grid>
 
                     {/* Right side: One Image */}
-                    <Grid item xs={12} md={3}>
-                      <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1' }}>
-                        <img src={item.videoRect} alt="Rectangle" style={{ width: '100%', maxWidth: '200px', height: 'auto', marginBottom: '10px' }} />
-                        <Typography variant="caption" align="center" style={{ color: 'black' }}>Rectangle Image</Typography>
+                    <Grid item xs={12} md={4}>
+                    <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                      {/* 왼쪽 Rectangle 이미지 (퍼센티지로 확대) */}
+                      <Paper 
+                        variant="outlined" 
+                        style={{ 
+                          padding: '10px', 
+                          textAlign: 'center', 
+                          backgroundColor: '#ecf0f1', 
+                          marginRight: '5px',
+                          flexGrow: 2 // 이미지 비율에 맞춰 확장
+                        }}
+                    >
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                          <img 
+                            src={item.videoRect} 
+                            alt="Rectangle" 
+                            style={{ width: '70%', height: 'auto' }} // 70% 크기로 확대
+                          />
+                          <Typography variant="caption" align="center" style={{ color: 'black', marginTop: '10px' }}>발견된 이미지</Typography>
+                        </Box>
                       </Paper>
+
+                      {/* 오른쪽 Detected Object 이미지 (퍼센티지로 축소) */}
+                      <Paper 
+                        variant="outlined" 
+                          style={{ 
+                          padding: '10px', 
+                          textAlign: 'center', 
+                          backgroundColor: '#ecf0f1',
+                          marginLeft: '5px',
+                          flexGrow: 1 // 이미지 비율에 맞춰 축소
+                        }}
+                      >
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                          <img 
+                            src={item.videoCrop} 
+                            alt="Detected" 
+                            style={{ width: '70%', height: 'auto' }} // 40% 크기로 축소
+                          />
+                          <Typography variant="caption" align="center" style={{ color: 'black', marginTop: '10px' }}>크롭된 이미지</Typography>
+                        </Box>
+                      </Paper>
+                      </Box>
                     </Grid>
                   </Grid>
 
