@@ -104,10 +104,10 @@ const History = () => {
                                 <CardContent sx={{ flex: '1', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: '20px' }}>
                                     <Typography variant="subtitle1"><strong>유사도: </strong> {videoDetails.similarity.toFixed(2)}%</Typography>
                                     <Typography variant="subtitle1">
-                                        <strong>Video Source:</strong> {truncateVideoName(videoDetails.video_name)} {/* 긴 이름은 줄이기 */}
+                                        <strong>비디오 소스: </strong> {truncateVideoName(videoDetails.video_name)} {/* 긴 이름은 줄이기 */}
                                     </Typography>
-                                    <Typography variant="subtitle1"><strong>Time:</strong> {videoDetails.time}</Typography>
-                                    <Typography variant="subtitle1"><strong>Input Image:</strong></Typography>
+                                    <Typography variant="subtitle1"><strong>발견시간:</strong> {videoDetails.time}</Typography>
+                                    <Typography variant="subtitle1"><strong>입력 이미지:</strong></Typography>
                                     <img
                                         src={`${latestImagePath}`}
                                         alt="Rectangle"
@@ -132,7 +132,7 @@ const History = () => {
                                         }
                                     })}
                                 >
-                                    View
+                                    결과 보기
                                 </Button>
                             </Card>
                         </Box>

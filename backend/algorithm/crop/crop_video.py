@@ -80,7 +80,7 @@ for video_file in os.listdir(video_folder):
 
                             # 각 사람마다 별도로 사각형 그리기
                             frame_with_rectangle = frame.copy()  # 프레임 복사
-                            cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 0, 255), 2)  # 빨간 사각형(색상: BGR, 두께: 2)
+                            cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 255, 255), 3)  # 빨간 사각형(색상: BGR, 두께: 3)
 
                             # 사각형이 그려진 이미지 저장
                             output_filename_rect = f'/data/FindSuspect/backend/src/main/frontend/public/video/{sys.argv[1]}/{sys.argv[1]}_frame{int(next_target_time)}_person{person_count}_rectangle.jpg'

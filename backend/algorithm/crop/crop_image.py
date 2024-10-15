@@ -32,7 +32,7 @@ for r in results:
             cropped_human = image[y1:y2, x1:x2]
             
             frame_with_rectangle = image.copy()  # 이미지 복사
-            cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 0, 255), 2)  # 빨간 사각형(색상: BGR, 두께: 2)
+            cv2.rectangle(frame_with_rectangle, (x1, y1), (x2, y2), (0, 255, 255), 3)  # 빨간 사각형(색상: BGR, 두께: 3)
             
             # 크롭된 이미지 저장
             output_filename = f'{image_name}_cropped.jpg'

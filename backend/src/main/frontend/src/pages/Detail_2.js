@@ -100,7 +100,7 @@ const Detail_2 = () => {
         <Card sx={{ mt: 3 }}>
           <CardContent>
             <Typography variant='h5' component="div" align='center'>
-              <strong>Result</strong>
+              <strong>결과</strong>
             </Typography>
             <Divider sx={{ backgroundColor: 'lightgray', mt: 1 }} />
             
@@ -108,37 +108,38 @@ const Detail_2 = () => {
             <Grid container spacing={2} alignItems="center">
               
               {/* 첫 번째 이미지 */}
-              <Grid item xs={12} md={1.5}>
-  <Paper 
-    variant="outlined" 
-    sx={{ 
-      p: 1, 
-      display: 'flex', 
-      flexDirection: 'column', // 이미지와 텍스트를 세로로 배치
-      justifyContent: 'center', 
-      alignItems: 'center' 
-    }}
-  >
-    <img 
-      src={imagePath || 'default-placeholder.png'} 
-      alt="Detected" 
-      style={{ width: '120%', height: '150px', objectFit: 'contain', marginBottom: '5px' }} 
-    />
-    <Typography 
-      variant="caption" 
-      align="center" 
-      sx={{ color: 'black', marginTop: '10px' }}
-    >
-      입력 이미지
-    </Typography>
-  </Paper>
-</Grid>
+              <Grid item xs={12} md={2}>  
+                <Paper 
+                  variant="outlined" 
+                  sx={{ 
+                    p: 1, 
+                    display: 'flex', 
+                    flexDirection: 'column', // 이미지와 텍스트를 세로로 배치
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    width: 'auto'
+                  }}
+                >
+                  <img 
+                    src={rectangleImagepath || 'default-placeholder.png'} 
+                    alt="Rectangle" 
+                    style={{ width: 'auto', height: '150px', objectFit: 'contain', marginBottom: '5px'}} 
+                  />
+                  <Typography 
+                    variant="caption" 
+                    align="center" 
+                    sx={{ color: 'black', marginTop: '10px' }}
+                  >
+                    입력 이미지
+                  </Typography>
+                </Paper>
+              </Grid>
 
               
               {/* 테이블 */}
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1" align='center' style={{ marginTop: '20px' }}><strong>Top matched:</strong></Typography>
-                <TableContainer component={Paper} sx={{ maxWidth: 250, margin: 'auto', marginBottom: '20px'}}>
+              <Grid item xs={12} md={5.5}>
+                <Typography variant="subtitle1" align='center' style={{ marginTop: '20px' }}><strong>최상 일치:</strong></Typography>
+              
                   <Table size="small">
                     <TableBody>
                       <TableRow>
@@ -155,76 +156,74 @@ const Detail_2 = () => {
                       ))}
                     </TableBody>
                   </Table>
-                </TableContainer>
+                
               </Grid>
               
-              {/* 두 번째 이미지 */}
-              <Grid item xs={12} md={4}>
-  <Box display="flex" justifyContent="space-between" alignItems="center">
-    {/* 첫 번째 이미지 */}
-    <Paper 
-      variant="outlined" 
-      sx={{ 
-        p: 1, 
-        display: 'flex', 
-        flexDirection: 'column', // 이미지를 세로로 배치
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginRight: '5px', 
-        flexGrow: 1 
-      }}
-    >
-      <img 
-        src={videoRectanglePath || 'default-placeholder.png'} 
-        alt="Result" 
-        style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
-      />
-      <Typography 
-        variant="caption" 
-        align="center" 
-        sx={{ color: 'black', marginTop: '10px' }} 
-      >
-        발견된 이미지
-      </Typography>
-    </Paper>
+              
+              <Grid item xs={12} md={4.5}>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Paper 
+                    variant="outlined" 
+                    sx={{ 
+                      p: 1, 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center', 
+                      alignItems: 'center', 
+                      marginRight: '5px', 
+                      flexGrow: 1 
+                    }}
+                  >
+                    <img 
+                      src={videoRectanglePath || 'default-placeholder.png'} 
+                      alt="Result" 
+                      style={{ width: 'auto', height: '150px', objectFit: 'cover' }} 
+                    />
+                    <Typography 
+                      variant="caption" 
+                      align="center" 
+                      sx={{ color: 'black', marginTop: '10px' }} 
+                    >
+                      발견된 이미지
+                    </Typography>
+                  </Paper>
     
-    {/* 두 번째 이미지 */}
-    <Paper 
-      variant="outlined" 
-      sx={{ 
-        p: 1, 
-        display: 'flex', 
-        flexDirection: 'column', // 이미지를 세로로 배치
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginLeft: '5px', 
-        flexGrow: 1 
-      }}
-    >
-      <img 
-        src={videoCropPath || 'default-placeholder.png'} 
-        alt="Result" 
-        style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
-      />
-      <Typography 
-        variant="caption" 
-        align="center" 
-        sx={{ color: 'black', marginTop: '10px' }} 
-      >
-        크롭된 이미지
-      </Typography>
-    </Paper>
-  </Box>
-</Grid>
+                  <Paper 
+                    variant="outlined" 
+                    sx={{ 
+                      p: 1, 
+                      display: 'flex', 
+                      flexDirection: 'column', // 이미지를 세로로 배치
+                      justifyContent: 'center', 
+                      alignItems: 'center', 
+                      marginLeft: '5px', 
+                      flexGrow: 1 
+                    }}
+                  >     
+                    <img 
+                      src={videoCropPath || 'default-placeholder.png'} 
+                      alt="Result" 
+                      style={{ width: 'auto', height: '150px', objectFit: 'cover' }} 
+                    />
+                    <Typography 
+                      variant="caption" 
+                      align="center" 
+                      sx={{ color: 'black', marginTop: '10px' }} 
+                    >
+                      크롭된 이미지
+                    </Typography>
+                  </Paper>
+                </Box>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
 
-        {/* 2번째 줄 1:2 비율로 레이아웃 설정 */}
         <Grid container spacing={2} sx={{ mt: 0 }} alignItems="center">
           <Grid item xs={12} md={4}>
             <Card>
               <CardContent sx={{ height: '200px' }}>
+              <Typography><strong>유사도 점수</strong></Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: -4, position: 'relative' }}>
                   <Box sx={{ width: '200px', height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
                     <Doughnut data={doughnutChartData} options={doughnutChartOptions} />

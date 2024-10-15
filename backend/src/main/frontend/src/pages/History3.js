@@ -52,7 +52,7 @@ const History3 = () => {
       <UserHeaderAppBar />
       <Container maxWidth="lg" style={{ marginTop: '30px', marginBottom: '30px' }}>
         <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: 'black' }}>
-          History
+          히스토리
         </Typography>
 
         {historyData.length > 0 ? (
@@ -91,7 +91,7 @@ const History3 = () => {
               <Card key={index} style={{ marginBottom: '20px', backgroundColor: '#f9f9f9', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', position: 'relative' }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold', color: 'black', textAlign: 'left', marginBottom: '10px' }}>
-                    Record {index + 1}
+                    기록 {index + 1}
                   </Typography>
                   <Divider style={{ marginBottom: '20px' }} />
 
@@ -100,23 +100,23 @@ const History3 = () => {
                     <Grid item xs={12} md={2}>
                       <Box display="flex" justifyContent="space-around" alignItems="center">
                         <Paper variant="outlined" style={{ padding: '10px', textAlign: 'center', backgroundColor: '#ecf0f1', marginRight: '5px' }}>
-                          <img src={item.imageName} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto'}} />
+                          <img src={item.imageRectangle} alt="Original" style={{ width: '100%', maxWidth: '200px', height: 'auto'}} />
                           <Typography variant="caption" align="center" style={{ color: 'black' }}>입력된 이미지</Typography>
                         </Paper>
                       </Box>
                     </Grid>
 
                     {/* Middle: Table */}
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={5.5}>
                       <Typography variant="subtitle1" style={{ fontWeight: 'bold', color: 'black', marginBottom: '10px', textAlign: 'center' }}>
-                        <strong>Top matched</strong>
+                        <strong>최상 일치</strong>
                       </Typography>
                       <Table size="small">
                         <TableBody>
                           <TableRow>
-                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>Attribute</TableCell>
-                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>Original Top 5</TableCell>
-                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>File Top 5</TableCell>
+                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>특징</TableCell>
+                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>원본 Top 5</TableCell>
+                            <TableCell align="center" sx={{ padding: '4px', fontSize: '12px' }}>파일 Top 5</TableCell>
                           </TableRow>
                           {item.attr_words.map((word, i) => (
                             <TableRow key={i}>
@@ -130,7 +130,7 @@ const History3 = () => {
                     </Grid>
 
                     {/* Right side: One Image */}
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4.5}>
                     <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                       {/* 왼쪽 Rectangle 이미지 (퍼센티지로 확대) */}
                       <Paper 
@@ -147,13 +147,13 @@ const History3 = () => {
                           <img 
                             src={item.videoRect} 
                             alt="Rectangle" 
-                            style={{ width: '70%', height: 'auto' }} // 70% 크기로 확대
+                            style={{ width: 'auto', height: '150px' }} 
                           />
                           <Typography variant="caption" align="center" style={{ color: 'black', marginTop: '10px' }}>발견된 이미지</Typography>
                         </Box>
                       </Paper>
 
-                      {/* 오른쪽 Detected Object 이미지 (퍼센티지로 축소) */}
+                      
                       <Paper 
                         variant="outlined" 
                           style={{ 
@@ -161,14 +161,14 @@ const History3 = () => {
                           textAlign: 'center', 
                           backgroundColor: '#ecf0f1',
                           marginLeft: '5px',
-                          flexGrow: 1 // 이미지 비율에 맞춰 축소
+                          flexGrow: 1 
                         }}
                       >
                         <Box display="flex" flexDirection="column" alignItems="center">
                           <img 
                             src={item.videoCrop} 
-                            alt="Detected" 
-                            style={{ width: '70%', height: 'auto' }} // 40% 크기로 축소
+                            alt="Cropped" 
+                            style={{ width: 'auto', height: '150px' }} 
                           />
                           <Typography variant="caption" align="center" style={{ color: 'black', marginTop: '10px' }}>크롭된 이미지</Typography>
                         </Box>
@@ -182,10 +182,11 @@ const History3 = () => {
                     <Grid item xs={12} md={4}>
                       <Card>
                         <CardContent sx={{ height: '200px' }}>
+                          <Typography><strong>유사도 점수</strong></Typography>
                           <Box sx={{ display: 'flex', justifyContent: 'center', mt: -4, position: 'relative' }}>
                             <Box sx={{ width: '200px', height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
                               <Doughnut data={doughnutChartData} options={doughnutChartOptions} />
-                              <Box sx={{ position: 'absolute', textAlign: 'center', top: '63%', transform: 'translateY(-50%)' }}>
+                              <Box sx={{ position: 'absolute', textAlign: 'center', top: '63%', transform: 'translateY(-45%)' }}>
                                 <Typography variant="h5" color="green">{item.similarity.toFixed(2)}%</Typography>
                                 <Typography variant="h5" color="green">Score</Typography>
                               </Box>
@@ -209,10 +210,10 @@ const History3 = () => {
                               </video>
                             </Grid>
                             <Grid item xs={6}>
-                              <Typography sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
-                                <strong>Video: {item.videoName || 'N/A'}</strong>
+                              <Typography sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%', marginTop:'15px' }}>
+                                <strong>비디오 이름: {item.videoName || 'N/A'}</strong>
                               </Typography>
-                              <Typography><strong>Detection Time: {item.time || 'N/A'}</strong></Typography>
+                              <Typography><strong>발견 시간: {item.time || 'N/A'}</strong></Typography>
                             </Grid>
                           </Grid>
                         </CardContent>

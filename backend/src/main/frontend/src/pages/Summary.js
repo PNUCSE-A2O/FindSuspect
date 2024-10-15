@@ -47,7 +47,7 @@ const Summery = () => {
             <Container maxWidth="lg" style={{ marginTop: '50px' }}>
                 <Grid container spacing={3}>
                     {Object.entries(summaryData).map(([videoName, videoResults], index) => (
-                        <Grid item xs={12} sm={6} key={index}> {/* 한 줄에 2개가 배치되도록 xs=12, sm=6 설정 */}
+                        <Grid item xs={12} sm={6} key={index}> 
                             <Card sx={{ mb: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <CardContent>
                                     <Typography variant="h6">{truncateVideoName(videoName)}</Typography>
