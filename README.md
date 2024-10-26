@@ -53,12 +53,13 @@
 
 ### 아키텍처 및 데이터 흐름
 
-[사진 추가 예정]
-[내용 추가 예정]
+![image](https://github.com/user-attachments/assets/65d6e82e-fff5-4b62-899d-4e05fe06b3b6)
+
 
 ### ERD
 
-[데이터베이스 관련 사진 및 내용 추가예정]
+![image](https://github.com/user-attachments/assets/57e0694b-4dcd-4666-9422-c0c6884a5b45)
+
 
 ## 개발 결과물을 사용하는 방법
 ### Admin 기준
